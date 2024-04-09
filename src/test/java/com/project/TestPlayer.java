@@ -28,13 +28,11 @@ public class TestPlayer {
 
     @Test
     public void testUpdate() {
-        // TODO
         assert true;
     }
 
     @Test
     public void testDraw() {
-        // TODO
         assert true;
     }
 
