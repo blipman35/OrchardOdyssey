@@ -7,7 +7,7 @@ public class TestBackground {
 
     @Test
     public void testBackground() {
-        Background background = new Background();
+        GameScreen background = new GameScreen();
         assertNotNull(background);
     }
 
