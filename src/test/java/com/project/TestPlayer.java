@@ -16,6 +16,7 @@ public class TestPlayer {
         player = new Player(gs, ki);
     }
 
+
     @Test
     public void testPlayer() {
         assertNotNull(player);
