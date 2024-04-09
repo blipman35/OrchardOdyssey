@@ -1,5 +1,8 @@
 package com.project;
 
+import javax.swing.*;
+import java.awt.*;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
