@@ -16,14 +16,13 @@ public class GameScreen extends JPanel implements Runnable{
    KeyInput keyI = new KeyInput();
    Thread gameThread;
    Player player = new Player(this,keyI);
-
-   int playerx = 100;
-   int playery = 100;
    int playerSpeed = 4;
     public  GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.cyan);
         this.setDoubleBuffered(true);
+        this.addKeyListener(keyI);
+        this.setFocusable(true);
     }
 
     public void startGameThread(){
