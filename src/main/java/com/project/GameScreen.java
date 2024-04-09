@@ -6,7 +6,7 @@ import java.awt.*;
 public class GameScreen extends JPanel implements Runnable{
    final int originalTile = 16;
    final int scale = 3;
-   final int scaledTile = originalTile * scale;
+   public final int scaledTile = originalTile * scale;
    final int maxScreenCol = 16;
    final int maxScreenRow = 12;
    final int screenWidth = scaledTile * maxScreenCol;
@@ -15,6 +15,11 @@ public class GameScreen extends JPanel implements Runnable{
    int FPS = 60;
    KeyInput keyI = new KeyInput();
    Thread gameThread;
+   Player player = new Player(this,keyI);
+
+   int playerx = 100;
+   int playery = 100;
+   int playerSpeed = 4;
     public  GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.cyan);
@@ -59,18 +64,13 @@ public class GameScreen extends JPanel implements Runnable{
     }
 
     public void update(){
-        if(keyI.upPressed == true){
-            //jump logic
-        }else{
-            //crouch logic
-        }
+        player.update();
     }
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
         Graphics2D graphics2 = (Graphics2D) graphics;
 
-        graphics2.setColor(Color.white);
-        graphics2.fillRect(100,100, scaledTile, scaledTile);
+        player.draw(graphics2);
         graphics2.dispose();
     }
 }
