@@ -5,6 +5,7 @@ import java.awt.*;
 public class Player extends Entity{
     GameScreen gs;
     KeyInput keyI;
+    private static int state;
 
     final int startingY = 300;
     private int speedY = 0;
@@ -53,5 +54,23 @@ public class Player extends Entity{
     public void draw(Graphics2D graphics2){
         graphics2.setColor(Color.white);
         graphics2.fillRect(x, y, gs.scaledTile, gs.scaledTile);
+    }
+
+    public void create(Graphics g){
+       //
+    }
+    public static Rectangle getPlayer(){
+        Rectangle player = new Rectangle();
+        player.x = 100;
+        /*Change with jump logic
+        if(state == JUMPING && !top_y) player.y = playerTop - jumpFactor;
+        else if(state == JUMPING && top_y) player.y = playerTop + jumpFactor;
+        else if(state != JUMPING) dino.y = playerTop;
+         */
+        /*
+        player.width = image.getWidth();
+        player.height = image.getHeight();
+         */
+        return  player;
     }
 }
