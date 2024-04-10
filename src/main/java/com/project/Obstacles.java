@@ -34,9 +34,11 @@ public class Obstacles extends Entity{
         image_list = new ArrayList<BufferedImage>();
 
         initialx = initialPos;
-        obstacleInterval = 200;
+        obstacleInterval = 500;
         speed = 7;
 
+        image_list.add(new Resource().getResourceImage("/images/scarecrow-2.jpg"));
+        image_list.add(new Resource().getResourceImage("/images/scarecrow-2.jpg"));
 
         /* input images
         -----------------------
@@ -50,7 +52,8 @@ public class Obstacles extends Entity{
             o.image = bi;
             o.x = x;
             o.y = 100;// change here
-
+            obstacle_list.add(o);
+            x+= obstacleInterval;
         }
     }
 
@@ -99,7 +102,7 @@ public class Obstacles extends Entity{
             Obstacle o = new Obstacle();
             o.image = bi;
             o.x = x;
-            o.y = 100; //Change later
+            o.y = 150; //Change later
             x+= obstacleInterval;
             obstacle_list.add(o);
         }

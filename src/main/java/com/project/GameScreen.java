@@ -11,11 +11,17 @@ public class GameScreen extends JPanel implements Runnable{
    final int maxScreenRow = 12;
    final int screenWidth = scaledTile * maxScreenCol;
    final int screenHeight = scaledTile * maxScreenRow;
-
+   private int score;
+   private int count;
    int FPS = 60;
    KeyInput keyI = new KeyInput();
    Thread gameThread;
    Player player = new Player(this,keyI);
+   Obstacles obstacles = new Obstacles((int)(screenWidth * 1.5));
+   Fruits fruits;
+
+   private boolean running = false;
+   private boolean gameOver = false;
    int playerSpeed = 4;
     public  GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -23,6 +29,7 @@ public class GameScreen extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
+
     }
 
     public void startGameThread(){
@@ -38,6 +45,7 @@ public class GameScreen extends JPanel implements Runnable{
         long currentTime;
         long timer = 0;
         int drawCount = 0;
+        running = true;
 
         while (gameThread != null) {
             currentTime = System.nanoTime();
@@ -63,13 +71,32 @@ public class GameScreen extends JPanel implements Runnable{
     }
 
     public void update(){
+        count += 1;
+        if(count % 100 == 0){
+            score += 1;
+        }
+
+
         player.update();
+        obstacles.update();
+        //fruits.update();
+
+        if(obstacles.hasCollidedObstacle()){
+            player.die();
+            repaint();
+            running = false;
+            gameOver = true;
+        }
+
     }
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
         Graphics2D graphics2 = (Graphics2D) graphics;
-
+        graphics.setFont(new Font("Times New Roman", Font.BOLD,25));
+        graphics.drawString(Integer.toString(score),getWidth()/2-5,100);
         player.draw(graphics2);
+        obstacles.create(graphics);
+        //fruits.create(graphics);
         graphics2.dispose();
     }
 }
