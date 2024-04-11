@@ -37,8 +37,8 @@ public class Obstacles extends Entity{
         obstacleInterval = 500;
         speed = 7;
 
-        image_list.add(new Resource().getResourceImage("/images/scarecrow-2.jpg"));
-        image_list.add(new Resource().getResourceImage("/images/scarecrow-2.jpg"));
+        image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
+        image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
 
         /* input images
         -----------------------
@@ -51,7 +51,7 @@ public class Obstacles extends Entity{
 
             o.image = bi;
             o.x = x;
-            o.y = 100;// change here
+            o.y = 300 - bi.getHeight()/2;
             obstacle_list.add(o);
             x+= obstacleInterval;
         }
@@ -67,7 +67,6 @@ public class Obstacles extends Entity{
             o.x -= speed;
         }
 
-        Obstacle last_o = obstacle_list.get(obstacle_list.size()-1);
 
         if(first_o.x < -first_o.image.getWidth()){
             obstacle_list.remove(first_o);
@@ -83,9 +82,10 @@ public class Obstacles extends Entity{
         }
     }
 
-    public boolean hasCollidedObstacle(){
+    public boolean hasCollidedObstacle(Player player){
+        Rectangle playerBounds = player.getBounds();
         for(Obstacle o: obstacle_list){
-            if(Player.getPlayer().intersects(o.getObstacle())){
+            if(playerBounds.intersects(o.getObstacle())){
                 System.out.println("Collision has occurred");
                 blockedAt = o;
                 return true;

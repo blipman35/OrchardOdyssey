@@ -4,25 +4,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
+
     GameScreen gs;
     KeyInput keyI;
-    private static int state;
-
-    private static int playerTop, playerBottom,topPoint;
-
-    private static boolean topPointReached;
-
-    private static int playerBaseY, playerTopY, playerStartX, playerEndX;
-
-    private int foot;
-
-    public static final int STAND_STILL = 1,
-            RUNNING = 2,
-            JUMPING = 3,
-            DIE = 4;
-    private final int LEFT_FOOT = 1,
-            RIGHT_FOOT = 2,
-            NO_FOOT = 3;
+    private  boolean isAlive;
     static BufferedImage image;
     BufferedImage leftFootPlayer;
     BufferedImage rightFootPlayer;
@@ -37,6 +22,9 @@ public class Player extends Entity{
         this.gs = gs;
         this.keyI = keyI;
         image = new Resource().getResourceImage("/images/player.png");
+        leftFootPlayer = new Resource().getResourceImage("/images/player.png");
+        rightFootPlayer = new Resource().getResourceImage("/images/player.png");
+        deadPlayer = new Resource().getResourceImage("/images/player.png");
         setDefaultValues();
     }
 
@@ -68,83 +56,24 @@ public class Player extends Entity{
 
         if(keyI.upPressed && !isJumping){
             isJumping = true;;
-            accelerate(-20);
+            accelerate(-25);
         }else{
             //crouch logic
         }
     }
 
     public void draw(Graphics2D graphics2){
-        graphics2.setColor(Color.white);
-        graphics2.fillRect(x, y, gs.scaledTile, gs.scaledTile);
-    }
-
-    public void create(Graphics g) {
-        playerBottom = playerTop + image.getHeight();
-        switch(state) {
-
-            case STAND_STILL:
-                System.out.println("stand");
-                g.drawImage(image, playerStartX, playerTopY, null);
-                break;
-
-            case RUNNING:
-                if(foot == NO_FOOT) {
-                    foot = LEFT_FOOT;
-                    g.drawImage(leftFootPlayer, playerStartX, playerTopY, null);
-                } else if(foot == LEFT_FOOT) {
-                    foot = RIGHT_FOOT;
-                    g.drawImage(rightFootPlayer, playerStartX, playerTopY, null);
-                } else {
-                    foot = LEFT_FOOT;
-                    g.drawImage(leftFootPlayer, playerStartX, playerTopY, null);
-                }
-                break;
-
-            case JUMPING:
-                if(isJumping) {
-                    g.drawImage(image, playerStartX, playerTop -= 100, null);
-                    break;
-                }
-                if(playerTop >= topPoint && !topPointReached) {
-                    topPointReached = true;
-                    g.drawImage(image, playerStartX, playerTop += 100, null);
-                    break;
-                }
-                if(playerTop > topPoint && topPointReached) {
-                    if(playerTopY == playerTop && topPointReached) {
-                        state = RUNNING;
-                        topPointReached = false;
-                        break;
-                    }
-                    g.drawImage(image, playerStartX, playerTop += 100, null);
-                    break;
-                }
-            case DIE:
-                g.drawImage(deadPlayer, playerStartX, playerTop, null);
-                break;
+        if(!isAlive){
+            graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
         }
+        graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
     }
-
     public void die(){
-        state = DIE;
+        isAlive = false;
     }
-    public void running(){
-        playerTop=playerTopY;
-        topPointReached = false;
-        state = JUMPING;
-    }
-    public static Rectangle getPlayer(){
-        Rectangle player = new Rectangle();
-        player.x = 100;
-        if(state == JUMPING && !topPointReached) player.y = playerTop - 100;
-        else if(state == JUMPING && topPointReached) player.y = playerTop + 100;
-        else if(state != JUMPING) player.y = playerTop;
 
-//        player.width = image.getWidth();
-//        player.height = image.getHeight();
-        player.width = 50;
-        player.height = 100;
-        return  player;
+    public static Rectangle getBounds() {
+        return new Rectangle(x, y, image.getWidth()-50, image.getHeight()-50);
     }
+
 }
