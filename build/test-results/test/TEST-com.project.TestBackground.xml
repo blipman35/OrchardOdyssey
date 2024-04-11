@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.project.TestBackground" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-04-08T19:07:07" hostname="Wills-MacBook-Pro-2.local" time="0.345">
-  <properties/>
-  <testcase name="testBackground()" classname="com.project.TestBackground" time="0.345"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
