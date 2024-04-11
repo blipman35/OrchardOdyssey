@@ -16,7 +16,6 @@ public class TestPlayer {
         player = new Player(gs, ki);
     }
 
-
     @Test
     public void testPlayer() {
         assertNotNull(player);
@@ -27,6 +26,12 @@ public class TestPlayer {
         player.setDefaultValues();
     }
 
+    @Test
+    public void testAccelerate() {
+        double acceleration = 1.0;
+        player.accelerate(acceleration);
+        //assertEquals(player.getSpeedY(), 1.0);
+    }
     @Test
     public void testUpdate() {
         assert true;
