@@ -8,9 +8,16 @@ import java.awt.*;
 public class TestFruits {
 
     private Fruits fruits;
+    private Player player;
 
     @BeforeEach
-    public void setUp() { fruits = new Fruits(0); }
+    public void setUp() {
+        GameScreen gs = new GameScreen();
+        KeyInput ki = new KeyInput();
+        player = new Player(gs, ki);
+        player.setDefaultValues();
+        fruits = new Fruits(100);
+    }
 
     @Test
     public void testFruits() {
@@ -29,9 +36,8 @@ public class TestFruits {
 
     @Test
     public void testHasCollidedFruit() {
-        fruits.hasCollidedFruit();
+        assertFalse(fruits.hasCollidedFruit(player));
     }
-
     @Test
     public void testResume() {
         fruits.resume();

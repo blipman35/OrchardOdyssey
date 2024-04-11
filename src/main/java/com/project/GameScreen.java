@@ -26,6 +26,7 @@ public class GameScreen extends JPanel implements Runnable{
    private boolean running = false;
    private boolean gameOver = false;
    int playerSpeed = 4;
+
     public  GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.cyan);
@@ -113,7 +114,7 @@ public class GameScreen extends JPanel implements Runnable{
 
 
 
-        if(fruits.hasCollidedFruit()){
+        if(fruits.hasCollidedFruit(player)){
             score += 8;
 
         }
