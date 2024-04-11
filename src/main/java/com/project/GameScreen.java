@@ -2,6 +2,9 @@ package com.project;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+
+import static org.slf4j.LoggerFactoryFriend.reset;
 
 public class GameScreen extends JPanel implements Runnable{
    final int originalTile = 16;
@@ -18,7 +21,7 @@ public class GameScreen extends JPanel implements Runnable{
    Thread gameThread;
    Player player = new Player(this,keyI);
    Obstacles obstacles = new Obstacles((int)(screenWidth * 1.5));
-   Fruits fruits;
+   Fruits fruits = new Fruits((int)(screenWidth*1.5));
 
    private boolean running = false;
    private boolean gameOver = false;
@@ -47,7 +50,7 @@ public class GameScreen extends JPanel implements Runnable{
         int drawCount = 0;
         running = true;
 
-        while (gameThread != null) {
+        while (running) {
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
@@ -62,13 +65,33 @@ public class GameScreen extends JPanel implements Runnable{
             }
 
             if (timer >= 1000000000) {
-                System.out.println("FPS:" + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
 
+            if (gameOver) {
+                System.out.println("Game Over! Score: " + score);
+                break;
+            }
         }
     }
+
+    public void keyPressed(KeyEvent e) {
+        if (gameOver && e.getKeyCode() == KeyEvent.VK_R) {
+            restartGame();
+        }
+    }
+
+    private void restartGame() {
+        score = 0;
+        count = 0;
+        gameOver = false;
+        player = new Player(this, keyI);
+        obstacles = new Obstacles((int)(screenWidth * 1.5));
+
+        startGameThread();
+    }
+
 
     public void update(){
         count += 1;
@@ -79,13 +102,20 @@ public class GameScreen extends JPanel implements Runnable{
 
         player.update();
         obstacles.update();
-        //fruits.update();
+        fruits.update();
 
-        if(obstacles.hasCollidedObstacle()){
+        if(obstacles.hasCollidedObstacle(player)){
             player.die();
             repaint();
             running = false;
             gameOver = true;
+        }
+
+
+
+        if(fruits.hasCollidedFruit()){
+            score += 8;
+
         }
 
     }
@@ -96,7 +126,9 @@ public class GameScreen extends JPanel implements Runnable{
         graphics.drawString(Integer.toString(score),getWidth()/2-5,100);
         player.draw(graphics2);
         obstacles.create(graphics);
-        //fruits.create(graphics);
-        graphics2.dispose();
+        fruits.create(graphics);
+        //graphics2.dispose();
     }
+
+
 }

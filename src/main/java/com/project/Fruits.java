@@ -10,6 +10,7 @@ public class Fruits extends Entity{
         BufferedImage image;
         int x;
         int y;
+        boolean isHit;
 
         Rectangle getFruit() {
             Rectangle fruit = new Rectangle();
@@ -30,26 +31,30 @@ public class Fruits extends Entity{
 
     private Fruits.Fruit blockedAt;
     public Fruits(int initialPos){
-        fruit_list = new ArrayList<Fruits.Fruit>();
+        fruit_list = new ArrayList<Fruit>();
         image_list = new ArrayList<BufferedImage>();
 
         initialx = initialPos;
-        fruitInterval = 200;
-        speed = 7;
+        fruitInterval = 1400;
+        speed = 8;
 
 
         /* input images
         -----------------------
         -----------------------
          */
+        image_list.add(new Resource().getResourceImage("/images/peach.jpg"));
+        image_list.add(new Resource().getResourceImage("/images/plum.jpg"));
 
         int x = initialx;
         for (BufferedImage bi : image_list){
-            Fruits.Fruit f = new Fruits.Fruit();
+            Fruit f = new Fruit();
 
             f.image = bi;
             f.x = x;
-            f.y = 100;// change here
+            f.y = 150;// change here
+            fruit_list.add(f);
+            x+=fruitInterval;
 
         }
     }
@@ -64,27 +69,26 @@ public class Fruits extends Entity{
             f.x -= speed;
         }
 
-        Fruits.Fruit last_f = fruit_list.get(fruit_list.size()-1);
 
         if(first_f.x < -first_f.image.getWidth()){
             fruit_list.remove(first_f);
             first_f.x = fruit_list.get(fruit_list.size()-1).x + fruitInterval;
             fruit_list.add(first_f);
+            first_f.isHit = false;
         }
     }
 
     public void create(Graphics g){
-        for(Fruits.Fruit f: fruit_list){
+        for(Fruit f: fruit_list){
             g.setColor(Color.black);
             g.drawImage(f.image,f.x,f.y,null); //This is where we add observer!
         }
     }
 
     public boolean hasCollidedFruit(){
-        for(Fruits.Fruit f: fruit_list){
-            if(Player.getPlayer().intersects(f.getFruit())){
-                System.out.println("Collision has occurred");
-                blockedAt = f;
+        for(Fruit f: fruit_list){
+            if(!f.isHit && Player.getBounds().intersects(f.getFruit())){
+                f.isHit = true;
                 return true;
             }
         }
@@ -93,10 +97,10 @@ public class Fruits extends Entity{
 
     public void resume(){
         int x = initialx/2;
-        fruit_list = new ArrayList<Fruits.Fruit>();
+        fruit_list = new ArrayList<Fruit>();
 
         for(BufferedImage bi: image_list){
-            Fruits.Fruit f = new Fruits.Fruit();
+            Fruit f = new Fruit();
             f.image = bi;
             f.x = x;
             f.y = 100; //Change later

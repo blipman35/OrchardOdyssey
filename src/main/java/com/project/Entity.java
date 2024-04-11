@@ -1,6 +1,7 @@
 package com.project;
 
 public class Entity {
-    public int x, y;
+    public static int x;
+    public static int y;
     public int speed;
 }
