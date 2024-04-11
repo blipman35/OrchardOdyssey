@@ -4,9 +4,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Fruits extends Entity{
-    private class Fruit {
+    class Fruit {
         BufferedImage image;
         int x;
         int y;
@@ -27,16 +28,19 @@ public class Fruits extends Entity{
     private int speed;
 
     private ArrayList<BufferedImage> image_list;
-    private ArrayList<Fruits.Fruit> fruit_list;
+    ArrayList<Fruits.Fruit> fruit_list;
 
     private Fruits.Fruit blockedAt;
     public Fruits(int initialPos){
+        Random random = new Random();
+        int randomNumber = random.nextInt(5000 - 1500 + 1) + 1500;
+
         fruit_list = new ArrayList<Fruit>();
         image_list = new ArrayList<BufferedImage>();
 
         initialx = initialPos;
-        fruitInterval = 1400;
-        speed = 8;
+        fruitInterval = randomNumber;
+        speed = 15;
 
 
         /* input images

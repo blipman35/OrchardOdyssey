@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Obstacles extends Entity{
     private class Obstacle {
@@ -33,9 +34,11 @@ public class Obstacles extends Entity{
         obstacle_list = new ArrayList<Obstacle>();
         image_list = new ArrayList<BufferedImage>();
 
+        Random random = new Random();
+        int randomNumber = random.nextInt(1600 - 500 + 1) + 500;
         initialx = initialPos;
-        obstacleInterval = 500;
-        speed = 7;
+        obstacleInterval = randomNumber;
+        speed = 10;
 
         image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
         image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
@@ -51,7 +54,7 @@ public class Obstacles extends Entity{
 
             o.image = bi;
             o.x = x;
-            o.y = 300 - bi.getHeight()/2;
+            o.y = y;
             obstacle_list.add(o);
             x+= obstacleInterval;
         }
@@ -77,8 +80,8 @@ public class Obstacles extends Entity{
 
     public void create(Graphics g){
         for(Obstacle o: obstacle_list){
-            g.setColor(Color.black);
-            g.drawImage(o.image,o.x,o.y,null); //This is where we add observer!
+            int obstacleBottom = Ground.GROUND_Y - o.image.getHeight()+5;
+            g.drawImage(o.image,o.x,obstacleBottom,null); //This is where we add observer!
         }
     }
 

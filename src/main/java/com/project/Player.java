@@ -7,7 +7,7 @@ public class Player extends Entity{
 
     GameScreen gs;
     KeyInput keyI;
-    private  boolean isAlive;
+    private  boolean isAlive = true;
     static BufferedImage image;
     BufferedImage leftFootPlayer;
     BufferedImage rightFootPlayer;
@@ -30,7 +30,7 @@ public class Player extends Entity{
 
     public void setDefaultValues() {
         x = 100;
-        y = 300;
+        y =300;
         speed = 4;
     }
     public void accelerate(double accelerationY) {
@@ -63,6 +63,7 @@ public class Player extends Entity{
     }
 
     public void draw(Graphics2D graphics2){
+        //int playerBottom = Ground.GROUND_Y - image.getHeight();
         if(!isAlive){
             graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
         }
@@ -73,7 +74,7 @@ public class Player extends Entity{
     }
 
     public static Rectangle getBounds() {
-        return new Rectangle(x, y, image.getWidth()-50, image.getHeight()-50);
+        return new Rectangle(x, y, image.getWidth()-49, image.getHeight());
     }
 
 }
