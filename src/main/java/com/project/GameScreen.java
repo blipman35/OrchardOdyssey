@@ -22,6 +22,7 @@ public class GameScreen extends JPanel implements Runnable{
    Player player = new Player(this,keyI);
    Obstacles obstacles = new Obstacles((int)(screenWidth * 1.5));
    Fruits fruits = new Fruits((int)(screenWidth*1.5));
+   Ground ground = new Ground(screenHeight);
 
    private boolean running = false;
    private boolean gameOver = false;
@@ -103,6 +104,7 @@ public class GameScreen extends JPanel implements Runnable{
         player.update();
         obstacles.update();
         fruits.update();
+        ground.update();
 
         if(obstacles.hasCollidedObstacle(player)){
             player.die();
@@ -126,7 +128,12 @@ public class GameScreen extends JPanel implements Runnable{
         graphics.drawString(Integer.toString(score),getWidth()/2-5,100);
         player.draw(graphics2);
         obstacles.create(graphics);
-        fruits.create(graphics);
+        for(Fruits.Fruit f : fruits.fruit_list) {
+            if(!f.isHit) { // Only draw fruits that are not hit
+                graphics.drawImage(f.image, f.x, f.y, null);
+            }
+        }
+        ground.create(graphics);
         //graphics2.dispose();
     }
 
