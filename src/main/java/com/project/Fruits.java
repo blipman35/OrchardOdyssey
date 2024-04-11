@@ -85,7 +85,7 @@ public class Fruits extends Entity{
         }
     }
 
-    public boolean hasCollidedFruit(){
+    public boolean hasCollidedFruit(Player player){
         for(Fruit f: fruit_list){
             if(!f.isHit && Player.getBounds().intersects(f.getFruit())){
                 f.isHit = true;
