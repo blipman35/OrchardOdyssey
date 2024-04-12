@@ -21,10 +21,10 @@ public class TestObstacles {
     public void testObstacles() { assertNotNull(obstacles); }
 
     @Test
-    public void testUpdate() { }
+    public void testUpdate() { obstacles.update(); }
 
     @Test
-    public void testCreate() { }
+    public void testCreate() { assert true; }
 
     @Test
     public void hasCollidedObstacle() {
