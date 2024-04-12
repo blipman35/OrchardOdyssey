@@ -38,6 +38,7 @@ public class TestFruits {
     public void testHasCollidedFruit() {
         assertFalse(fruits.hasCollidedFruit(player));
     }
+
     @Test
     public void testResume() {
         fruits.resume();

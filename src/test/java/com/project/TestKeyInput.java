@@ -17,7 +17,8 @@ public class TestKeyInput {
     @Test
     public void testKeyTyped() {
         // function 'keyTyped' is not implemented yet
-        assert true;
+        KeyEvent wEvent = new KeyEvent(new java.awt.Button(), KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_W, 'W');
+        keyInput.keyTyped(wEvent);
     }
 
     @Test
