@@ -16,6 +16,7 @@ public class TestKeyInput {
 
     @Test
     public void testKeyTyped() {
+        // function 'keyTyped' is not implemented yet
         assert true;
     }
 

@@ -94,14 +94,11 @@ public class GameScreen extends JPanel implements Runnable{
         startGameThread();
     }
 
-
     public void update(){
         count += 1;
         if(count % 100 == 0){
             score += 1;
         }
-
-
         player.update();
         obstacles.update();
         fruits.update();
@@ -113,15 +110,11 @@ public class GameScreen extends JPanel implements Runnable{
             running = false;
             gameOver = true;
         }
-
-
-
         if(fruits.hasCollidedFruit(player)){
             score += 8;
-
         }
-
     }
+
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
         Graphics2D graphics2 = (Graphics2D) graphics;
@@ -137,6 +130,5 @@ public class GameScreen extends JPanel implements Runnable{
         ground.create(graphics);
         //graphics2.dispose();
     }
-
 
 }

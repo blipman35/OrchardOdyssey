@@ -9,29 +9,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGameScreen {
 
+    private GameScreen gameScreen;
+
+    @BeforeEach
+    public void setUp() { gameScreen = new GameScreen(); }
+
     @Test
-    public void testGameScreen() {
-        GameScreen gameScreen = new GameScreen();
-        assertNotNull(gameScreen);
+    public void testGameScreen() { assertNotNull(gameScreen); }
+
+    @Test
+    public void testStartGameThread() { gameScreen.startGameThread();
     }
 
     @Test
-    public void testStartGameThread() {
-        GameScreen gameScreen = new GameScreen();
-        gameScreen.startGameThread();
-    }
+    public void testRun() { gameScreen.run(); }
 
     @Test
-    public void testRun() {
-        GameScreen gameScreen = new GameScreen();
-        gameScreen.run();
-    }
-
-    @Test
-    public void testUpdate() {
-        GameScreen gameScreen = new GameScreen();
-        gameScreen.update();
-    }
+    public void testUpdate() { gameScreen.update(); }
 
     @Test
     public void testPaintComponent() {

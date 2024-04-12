@@ -16,7 +16,7 @@ public class TestFruits {
         KeyInput ki = new KeyInput();
         player = new Player(gs, ki);
         player.setDefaultValues();
-        fruits = new Fruits(100);
+        fruits = new Fruits(150);
     }
 
     @Test
@@ -26,7 +26,7 @@ public class TestFruits {
 
     @Test
     public void testUpdate() {
-        assert true;
+        fruits.update();
     }
 
     @Test

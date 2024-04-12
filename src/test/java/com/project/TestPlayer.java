@@ -34,12 +34,18 @@ public class TestPlayer {
     }
     @Test
     public void testUpdate() {
-        assert true;
+        player.update();
     }
-
     @Test
     public void testDraw() {
         assert true;
     }
 
+    @Test
+    public void testDie() { player.die(); }
+
+    @Test
+    public void testGetBounds() {
+        assertNotNull(Player.getBounds());
+    }
 }
