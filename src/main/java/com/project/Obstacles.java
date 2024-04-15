@@ -86,7 +86,7 @@ public class Obstacles extends Entity{
     }
 
     public boolean hasCollidedObstacle(Player player){
-        Rectangle playerBounds = Player.getBounds();
+        Rectangle playerBounds = player.getBounds();
         for(Obstacle o: obstacle_list){
             if(playerBounds.intersects(o.getObstacle())){
                 System.out.println("Collision has occurred");
