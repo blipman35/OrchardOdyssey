@@ -48,7 +48,7 @@ public class Fruits extends Entity{
         -----------------------
          */
         image_list.add(new Resource().getResourceImage("/images/peach.png"));
-        image_list.add(new Resource().getResourceImage("/images/plum.jpg"));
+        image_list.add(new Resource().getResourceImage("/images/plum.png"));
 
         int x = initialx;
         for (BufferedImage bi : image_list){
