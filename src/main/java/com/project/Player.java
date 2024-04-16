@@ -12,11 +12,13 @@ public class Player extends Entity{
     BufferedImage leftFootPlayer;
     BufferedImage rightFootPlayer;
     BufferedImage deadPlayer;
+    BufferedImage crouchPlayer;
 
 
     final int startingY = 300;
     private int speedY = 0;
     private boolean isJumping = false;
+    private boolean isCrouching = false;
 
     public Player(GameScreen gs, KeyInput keyI){
         this.gs = gs;
@@ -25,6 +27,7 @@ public class Player extends Entity{
         leftFootPlayer = new Resource().getResourceImage("/images/player.png");
         rightFootPlayer = new Resource().getResourceImage("/images/player.png");
         deadPlayer = new Resource().getResourceImage("/images/player.png");
+        crouchPlayer = new Resource().getResourceImage("/images/player.png");
         setDefaultValues();
     }
 
@@ -57,8 +60,11 @@ public class Player extends Entity{
         if(keyI.upPressed && !isJumping){
             isJumping = true;;
             accelerate(-25);
-        }else{
-            //crouch logic
+        }
+        if (keyI.downPressed && !isJumping && !isCrouching) {
+            isCrouching = true;
+        } else if (!keyI.downPressed && isCrouching) {
+            isCrouching = false;
         }
     }
 
@@ -67,13 +73,21 @@ public class Player extends Entity{
         if(!isAlive){
             graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
         }
-        graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
+        else if (isCrouching) {
+            graphics2.drawImage(crouchPlayer, x, y + (gs.scaledTile - gs.scaledTile / 2), gs.scaledTile, gs.scaledTile/2, null);
+        }
+        else {
+            graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
+        }
     }
     public void die(){
         isAlive = false;
     }
 
-    public static Rectangle getBounds() {
+    public Rectangle getBounds() { //static
+        if (isCrouching) {
+            return new Rectangle(x, y + gs.scaledTile - gs.scaledTile / 2, image.getWidth()-49, image.getHeight()/2);
+        }
         return new Rectangle(x, y, image.getWidth()-49, image.getHeight());
     }
 
