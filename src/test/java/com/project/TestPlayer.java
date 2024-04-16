@@ -46,6 +46,6 @@ public class TestPlayer {
 
     @Test
     public void testGetBounds() {
-        assertNotNull(Player.getBounds());
+        assertNotNull(player.getBounds());
     }
 }
