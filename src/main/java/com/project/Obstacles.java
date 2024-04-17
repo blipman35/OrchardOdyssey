@@ -11,14 +11,18 @@ public class Obstacles extends Entity{
         BufferedImage image;
         int x;
         int y;
+        String imageName = "Scarecrow";
 
         Rectangle getObstacle() {
             Rectangle obstacle = new Rectangle();
             obstacle.x = x;
-            obstacle.y = y;
+            if ("Crow".equals(imageName)) {
+                obstacle.y = y - 45;  // Since it is raised, decrease the y position
+            } else {
+                obstacle.y = y;
+            }
             obstacle.width = image.getWidth();
             obstacle.height = image.getHeight();
-
             return obstacle;
         }
     }
@@ -42,6 +46,7 @@ public class Obstacles extends Entity{
 
         image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
         image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
+        image_list.add(new Resource().getResourceImage("/images/crow.png"));
 
         /* input images
         -----------------------
@@ -51,7 +56,9 @@ public class Obstacles extends Entity{
         int x = initialx;
         for (BufferedImage bi : image_list){
             Obstacle o = new Obstacle();
-
+            if (bi.getType() == 13){
+                o.imageName = "Crow";
+            }
             o.image = bi;
             o.x = x;
             o.y = y;
@@ -81,6 +88,9 @@ public class Obstacles extends Entity{
     public void create(Graphics g){
         for(Obstacle o: obstacle_list){
             int obstacleBottom = Ground.GROUND_Y - o.image.getHeight()+5;
+            if (o.imageName.equals("Crow")) {
+                obstacleBottom -= 45; // Raise the image by 50 pixels
+            }
             g.drawImage(o.image,o.x,obstacleBottom,null); //This is where we add observer!
         }
     }
