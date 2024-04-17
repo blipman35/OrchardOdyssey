@@ -56,7 +56,7 @@ public class Fruits extends Entity{
 
             f.image = bi;
             f.x = x;
-            f.y = 150;// change here
+            f.y =  random.nextInt(175 - 40 + 1) + 40;// change here
             fruit_list.add(f);
             x+=fruitInterval;
 
