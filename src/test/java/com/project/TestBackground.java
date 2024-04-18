@@ -7,7 +7,7 @@ public class TestBackground {
 
     @Test
     public void testBackground() {
-        GameScreen background = new GameScreen();
+        GameScreen background = GameScreen.getInstance();
         assertNotNull(background);
     }
 

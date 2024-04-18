@@ -10,7 +10,7 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Orchard Odyssey");
 
-        GameScreen gameScreen = new GameScreen();
+        GameScreen gameScreen = GameScreen.getInstance();
         window.add(gameScreen);
 
         window.pack();

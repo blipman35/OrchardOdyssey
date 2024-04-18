@@ -12,7 +12,7 @@ public class TestGameScreen {
     private GameScreen gameScreen;
 
     @BeforeEach
-    public void setUp() { gameScreen = new GameScreen(); }
+    public void setUp() { gameScreen = GameScreen.getInstance(); }
 
     @Test
     public void testGameScreen() { assertNotNull(gameScreen); }
