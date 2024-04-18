@@ -28,7 +28,6 @@ public class Obstacles extends Entity{
     }
     private int initialx;
     private int obstacleInterval;
-    private int speed;
 
     private ArrayList<BufferedImage> image_list;
     private ArrayList<Obstacle> obstacle_list;
@@ -39,10 +38,10 @@ public class Obstacles extends Entity{
         image_list = new ArrayList<BufferedImage>();
 
         Random random = new Random();
-        int randomNumber = random.nextInt(1600 - 500 + 1) + 500;
+        int randomNumber = random.nextInt(2600 - 500 + 1) + 500;
         initialx = initialPos;
         obstacleInterval = randomNumber;
-        speed = 10;
+        //speed = 10;
 
         image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
         image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
@@ -67,7 +66,7 @@ public class Obstacles extends Entity{
         }
     }
 
-    public void update(){
+    public void update(int speed){
         Iterator<Obstacle> obloop = obstacle_list.iterator();
         Obstacle first_o = obloop.next();
         first_o.x -= speed;

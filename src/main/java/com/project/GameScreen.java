@@ -19,6 +19,8 @@ public class GameScreen extends JPanel implements Runnable{
     final int screenHeight = scaledTile * maxScreenRow;
     private int score;
     private int count;
+
+    private int speed = 10;
     int FPS = 60;
     KeyInput keyI = new KeyInput();
     Thread gameThread;
@@ -106,13 +108,14 @@ public class GameScreen extends JPanel implements Runnable{
 
     public void update(){
         count += 1;
-        if(count % 100 == 0){
+        if(count % 50 == 0){
             score += 1;
+            speed += .15;
         }
         player.update();
-        obstacles.update();
-        fruits.update();
-        ground.update();
+        obstacles.update(speed);
+        fruits.update(speed);
+        ground.update(speed);
 
         if(obstacles.hasCollidedObstacle(player)){
             player.die();

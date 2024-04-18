@@ -26,7 +26,8 @@ public class TestFruits {
 
     @Test
     public void testUpdate() {
-        fruits.update();
+        int speed = 10;
+        fruits.update(speed);
     }
 
     @Test

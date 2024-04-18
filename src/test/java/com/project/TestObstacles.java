@@ -21,7 +21,7 @@ public class TestObstacles {
     public void testObstacles() { assertNotNull(obstacles); }
 
     @Test
-    public void testUpdate() { obstacles.update(); }
+    public void testUpdate() { int speed = 10; obstacles.update(speed); }
 
     @Test
     public void testCreate() { assert true; }

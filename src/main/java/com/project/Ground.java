@@ -20,7 +20,6 @@ public class Ground {
 
     public Ground(int panelHeight) {
         GROUND_Y = (int)(panelHeight - 0.4 * panelHeight);
-
         try{
             image = new Resource().getResourceImage("/images/Ground.png");
         } catch(Exception e) {e.printStackTrace();}
@@ -36,11 +35,11 @@ public class Ground {
         }
     }
 
-    public void update() {
+    public void update(int speed) {
         Iterator<GroundImage> looper = groundImageSet.iterator();
         GroundImage first = looper.next();
 
-        first.x -= 10;
+        first.x -= speed;
 
         int previousX = first.x;
         while(looper.hasNext()) {
