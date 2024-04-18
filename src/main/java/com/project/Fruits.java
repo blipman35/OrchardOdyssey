@@ -25,7 +25,6 @@ public class Fruits extends Entity{
     }
     private int initialx;
     private int fruitInterval;
-    private int speed;
 
     private ArrayList<BufferedImage> image_list;
     ArrayList<Fruits.Fruit> fruit_list;
@@ -33,7 +32,7 @@ public class Fruits extends Entity{
     private Fruits.Fruit blockedAt;
     public Fruits(int initialPos){
         Random random = new Random();
-        int randomNumber = random.nextInt(5000 - 1500 + 1) + 1500;
+        int randomNumber = random.nextInt(6000 - 2500 + 1) + 2500;
 
         fruit_list = new ArrayList<Fruit>();
         image_list = new ArrayList<BufferedImage>();
@@ -63,7 +62,7 @@ public class Fruits extends Entity{
         }
     }
 
-    public void update(){
+    public void update(int speed){
         Iterator<Fruits.Fruit> frloop = fruit_list.iterator();
         Fruits.Fruit first_f = frloop.next();
         first_f.x -= speed;

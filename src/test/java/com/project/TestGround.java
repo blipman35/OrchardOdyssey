@@ -20,6 +20,7 @@ public class TestGround {
 
     @Test
     public void testUpdate() {
-        ground.update();
+        int speed = 10;
+        ground.update(speed);
     }
 }
