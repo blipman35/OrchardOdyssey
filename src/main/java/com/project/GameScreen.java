@@ -7,34 +7,44 @@ import java.awt.event.KeyEvent;
 import static org.slf4j.LoggerFactoryFriend.reset;
 
 public class GameScreen extends JPanel implements Runnable{
-   final int originalTile = 16;
-   final int scale = 3;
-   public final int scaledTile = originalTile * scale;
-   final int maxScreenCol = 16;
-   final int maxScreenRow = 12;
-   final int screenWidth = scaledTile * maxScreenCol;
-   final int screenHeight = scaledTile * maxScreenRow;
-   private int score;
-   private int count;
-   int FPS = 60;
-   KeyInput keyI = new KeyInput();
-   Thread gameThread;
-   Player player = new Player(this,keyI);
-   Obstacles obstacles = new Obstacles((int)(screenWidth * 1.5));
-   Fruits fruits = new Fruits((int)(screenWidth*1.5));
-   Ground ground = new Ground(screenHeight);
 
-   private boolean running = false;
-   private boolean gameOver = false;
-   int playerSpeed = 4;
+    private static GameScreen instance = null;
 
-    public  GameScreen(){
+    final int originalTile = 16;
+    final int scale = 3;
+    public final int scaledTile = originalTile * scale;
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12;
+    final int screenWidth = scaledTile * maxScreenCol;
+    final int screenHeight = scaledTile * maxScreenRow;
+    private int score;
+    private int count;
+    int FPS = 60;
+    KeyInput keyI = new KeyInput();
+    Thread gameThread;
+    Player player = new Player(this,keyI);
+    Obstacles obstacles = new Obstacles((int)(screenWidth * 1.5));
+    Fruits fruits = new Fruits((int)(screenWidth*1.5));
+    Ground ground = new Ground(screenHeight);
+
+    private boolean running = false;
+    private boolean gameOver = false;
+    int playerSpeed = 4;
+
+    private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.cyan);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
 
+    }
+
+    public static synchronized GameScreen getInstance(){
+        if (instance == null) {
+            instance = new GameScreen();
+        }
+        return instance;
     }
 
     public void startGameThread(){

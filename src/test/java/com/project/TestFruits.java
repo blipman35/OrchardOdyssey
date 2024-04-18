@@ -12,7 +12,7 @@ public class TestFruits {
 
     @BeforeEach
     public void setUp() {
-        GameScreen gs = new GameScreen();
+        GameScreen gs = GameScreen.getInstance();
         KeyInput ki = new KeyInput();
         player = new Player(gs, ki);
         player.setDefaultValues();
