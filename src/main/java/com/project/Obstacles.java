@@ -99,6 +99,7 @@ public class Obstacles extends Entity{
         for(Obstacle o: obstacle_list){
             if(playerBounds.intersects(o.getObstacle())){
                 System.out.println("Collision has occurred");
+                GameScreen.getInstance().notifyObservers(EventType.Collision, "Collision has occurred");
                 blockedAt = o;
                 return true;
             }

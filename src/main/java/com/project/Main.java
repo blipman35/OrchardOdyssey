@@ -2,6 +2,7 @@ package com.project;
 
 
 import javax.swing.*;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,6 +18,9 @@ public class Main {
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        Observer observer = new Observer("All events");
+        gameScreen.attach(observer, List.of(EventType.All));
 
         gameScreen.startGameThread();
     }

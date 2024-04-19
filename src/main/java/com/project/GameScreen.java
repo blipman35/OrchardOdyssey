@@ -3,12 +3,16 @@ package com.project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.*;
+import java.util.List;
 
 import static org.slf4j.LoggerFactoryFriend.reset;
 
-public class GameScreen extends JPanel implements Runnable{
+public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private static GameScreen instance = null;
+
+    private List<IObserver> observers = new ArrayList<>();
 
     final int originalTile = 16;
     final int scale = 3;
@@ -49,6 +53,26 @@ public class GameScreen extends JPanel implements Runnable{
         return instance;
     }
 
+    @Override
+    public void attach(IObserver observer, List<EventType> interestingEvents) {
+        observers.add(observer);
+        for (EventType eventType : interestingEvents) {
+            EventBus.getInstance().attach(observer, eventType);
+        }
+    }
+
+    @Override
+    public void detach(IObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(EventType eventType, String eventDescription) {
+        for (IObserver observer : observers) {
+            EventBus.getInstance().postMessage(eventType, eventDescription);
+        }
+    }
+
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
@@ -85,6 +109,7 @@ public class GameScreen extends JPanel implements Runnable{
 
             if (gameOver) {
                 System.out.println("Game Over! Score: " + score);
+                notifyObservers(EventType.GameOver, "Game Over! Score: " + score);
                 break;
             }
         }
