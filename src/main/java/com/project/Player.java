@@ -1,33 +1,31 @@
 package com.project;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Player extends Entity{
 
     GameScreen gs;
     KeyInput keyI;
     private  boolean isAlive = true;
-    static BufferedImage image;
-    BufferedImage leftFootPlayer;
-    BufferedImage rightFootPlayer;
     BufferedImage deadPlayer;
-    BufferedImage crouchPlayer;
 
-
+    BufferedImage player_1, player_2, player_3, player_4;
     final int startingY = 300;
     private int speedY = 0;
     private boolean isJumping = false;
     private boolean isCrouching = false;
 
+    private int spriteCounter = 0;
+    private int spriteNum = 0;
+
     public Player(GameScreen gs, KeyInput keyI){
         this.gs = gs;
         this.keyI = keyI;
-        image = new Resource().getResourceImage("/images/player.png");
-        leftFootPlayer = new Resource().getResourceImage("/images/player.png");
-        rightFootPlayer = new Resource().getResourceImage("/images/player.png");
+        getPlayerImages();
         deadPlayer = new Resource().getResourceImage("/images/player.png");
-        crouchPlayer = new Resource().getResourceImage("/images/player.png");
         setDefaultValues();
     }
 
@@ -35,6 +33,20 @@ public class Player extends Entity{
         x = 100;
         y =300;
         speed = 4;
+    }
+
+    public void getPlayerImages() {
+
+        try {
+            player_1 = ImageIO.read(getClass().getResource("/player/player_1.png"));
+            player_2 = ImageIO.read(getClass().getResource("/player/player_2.png"));
+            player_3 = ImageIO.read(getClass().getResource("/player/player_3.png"));
+            player_4 = ImageIO.read(getClass().getResource("/player/player_4.png"));
+
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
     public void accelerate(double accelerationY) {
         speedY += accelerationY;
@@ -66,15 +78,33 @@ public class Player extends Entity{
         } else if (!keyI.downPressed && isCrouching) {
             isCrouching = false;
         }
+
+        spriteCounter++;
+        if (spriteCounter > 10) {
+            spriteNum = (spriteNum + 1) % 4;
+            spriteCounter = 0;
+        }
     }
 
     public void draw(Graphics2D graphics2){
         //int playerBottom = Ground.GROUND_Y - image.getHeight();
+        BufferedImage image = null;
+        if (spriteNum == 1) {
+            image = player_1;
+        } else if (spriteNum == 2) {
+            image = player_2;
+        } else if (spriteNum == 3) {
+            image = player_3;
+        } else {
+            image = player_4;
+        }
         if(!isAlive){
+            // still need a dead player
             graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
         }
         else if (isCrouching) {
-            graphics2.drawImage(crouchPlayer, x, y + (gs.scaledTile - gs.scaledTile / 2), gs.scaledTile, gs.scaledTile/2, null);
+            // still need a crouching player
+            graphics2.drawImage(image, x, y + (gs.scaledTile - gs.scaledTile / 2), gs.scaledTile, gs.scaledTile/2, null);
         }
         else {
             graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
@@ -86,9 +116,9 @@ public class Player extends Entity{
 
     public Rectangle getBounds() { //static
         if (isCrouching) {
-            return new Rectangle(x, y + gs.scaledTile - gs.scaledTile / 2, image.getWidth()-49, image.getHeight()/2);
+            return new Rectangle(x, y + gs.scaledTile - gs.scaledTile / 2, player_1.getWidth(), player_1.getHeight()/2);
         }
-        return new Rectangle(x, y, image.getWidth()-49, image.getHeight());
+        return new Rectangle(x, y, player_1.getWidth(), player_1.getHeight());
     }
 
 }
