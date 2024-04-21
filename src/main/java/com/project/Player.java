@@ -12,7 +12,7 @@ public class Player extends Entity{
     private  boolean isAlive = true;
     BufferedImage deadPlayer;
 
-    BufferedImage player_1, player_2, player_3, player_4;
+    BufferedImage player_1, player_2, player_3, player_4, player_jump;
     final int startingY = 300;
     private int speedY = 0;
     private boolean isJumping = false;
@@ -25,7 +25,6 @@ public class Player extends Entity{
         this.gs = gs;
         this.keyI = keyI;
         getPlayerImages();
-        deadPlayer = new Resource().getResourceImage("/images/player.png");
         setDefaultValues();
     }
 
@@ -36,18 +35,18 @@ public class Player extends Entity{
     }
 
     public void getPlayerImages() {
-
         try {
             player_1 = ImageIO.read(getClass().getResource("/player/player_1.png"));
             player_2 = ImageIO.read(getClass().getResource("/player/player_2.png"));
             player_3 = ImageIO.read(getClass().getResource("/player/player_3.png"));
             player_4 = ImageIO.read(getClass().getResource("/player/player_4.png"));
-
+            player_jump = ImageIO.read(getClass().getResource("/player/player_jump.png"));
         }
         catch(IOException e) {
             e.printStackTrace();
         }
     }
+
     public void accelerate(double accelerationY) {
         speedY += accelerationY;
     }
@@ -70,7 +69,7 @@ public class Player extends Entity{
         }
 
         if(keyI.upPressed && !isJumping){
-            isJumping = true;;
+            isJumping = true;
             accelerate(-25);
         }
         if (keyI.downPressed && !isJumping && !isCrouching) {
@@ -102,6 +101,9 @@ public class Player extends Entity{
             // still need a dead player
             graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
         }
+        else if(isJumping) {
+            graphics2.drawImage(player_jump, x, y, gs.scaledTile, gs.scaledTile, null);
+        }
         else if (isCrouching) {
             // still need a crouching player
             graphics2.drawImage(image, x, y + (gs.scaledTile - gs.scaledTile / 2), gs.scaledTile, gs.scaledTile/2, null);
@@ -110,6 +112,7 @@ public class Player extends Entity{
             graphics2.drawImage(image, x, y, gs.scaledTile, gs.scaledTile, null);
         }
     }
+
     public void die(){
         isAlive = false;
     }
