@@ -18,6 +18,9 @@ public class Observer implements IObserver{
     @Override
     public void update(EventType event, String eventDescription) {
         System.out.println("Observer " + name + " received event " + event + " with description: " + eventDescription);
+        if (events.contains(EventType.All) || events.contains(event)) {
+            messages.add(eventDescription);
+        }
     }
 
     public String getLastEventDescription() {
