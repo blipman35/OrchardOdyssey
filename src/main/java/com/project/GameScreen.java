@@ -149,7 +149,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             gameOver = true;
         }
         if(fruits.hasCollidedFruit(player)){
-            score += 8;
+            score += 5;
         }
     }
 
