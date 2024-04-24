@@ -149,7 +149,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count += 1;
         if(count % 50 == 0){
             score += 1;
-            speed += .2;
+            speed += .25;
         }
         player.update();
         obstacles.update(speed);
