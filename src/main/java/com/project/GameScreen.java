@@ -149,7 +149,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count += 1;
         if(count % 50 == 0){
             score += 1;
-            speed += .15;
+            speed += .2;
         }
         player.update();
         obstacles.update(speed);
@@ -163,7 +163,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             gameOver = true;
         }
         if(fruits.hasCollidedFruit(player)){
-            score += 8;
+            score += 5;
         }
     }
 
