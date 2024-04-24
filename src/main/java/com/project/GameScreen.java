@@ -44,12 +44,34 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private boolean gameOver = false;
     int playerSpeed = 4;
 
+    private JButton playButton;
+    private JButton restartButton;
+
+    private boolean isGameStarted = false;
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.cyan);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
+
+        playButton = new JButton("Play"); 
+        playButton.addActionListener(e -> startGame());
+
+        restartButton = new JButton("Try again");
+        restartButton.addActionListener(e -> restartGame());
+        restartButton.setVisible(false);
+        this.add(playButton);
+        this.add(restartButton);
+    }
+
+    private void startGame() { 
+        if (!isGameStarted) { 
+            isGameStarted = true;
+            playButton.setVisible(false);
+            restartButton.setVisible(false);
+            startGameThread();
+        }
     }
 
     public static synchronized GameScreen getInstance(){
@@ -102,28 +124,33 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         running = true;
 
         while (running) {
-            currentTime = System.nanoTime();
+            if(isGameStarted) {
+                
+                currentTime = System.nanoTime();
 
-            delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
-            lastTime = currentTime;
+                delta += (currentTime - lastTime) / drawInterval;
+                timer += (currentTime - lastTime);
+                lastTime = currentTime;
 
-            if (delta >= 1) {
-                update();
-                repaint();
-                delta--;
-                drawCount++;
-            }
+                if (delta >= 1) {
+                    update();
+                    repaint();
+                    delta--;
+                    drawCount++;
+                }
 
-            if (timer >= 1000000000) {
-                drawCount = 0;
-                timer = 0;
-            }
+                if (timer >= 1000000000) {
+                    drawCount = 0;
+                    timer = 0;
+                }
 
-            if (gameOver) {
-                System.out.println("Game Over! Score: " + score);
-                notifyObservers(EventType.GameOver, "Game Over! Score: " + score);
-                break;
+                if (gameOver) {
+                    System.out.println("Game Over! Score: " + score);
+                    notifyObservers(EventType.GameOver, "Game Over! Score: " + score);
+                    isGameStarted = false;
+                    restartButton.setVisible(true);
+                    break;
+                }
             }
         }
     }
@@ -139,9 +166,9 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count = 0;
         gameOver = false;
         //player = new Player(this, keyI);
-        obstacles = new Obstacles((int)(screenWidth * 1.5));
-
-        startGameThread();
+        //obstacles = new Obstacles((int)(screenWidth * 1.5));
+        initializeEntities();
+        startGame();
     }
 
     public void update(){
