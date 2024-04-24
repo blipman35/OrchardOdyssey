@@ -26,12 +26,19 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private int speed = 10;
     int FPS = 60;
+
+    private Thread gameThread;
     KeyInput keyI = new KeyInput();
-    Thread gameThread;
-    Player player = new Player(this,keyI);
-    Obstacles obstacles = new Obstacles((int)(screenWidth * 1.5));
-    Fruits fruits = new Fruits((int)(screenWidth*1.5));
-    Ground ground = new Ground(screenHeight);
+    // Entity factories
+    private EntityFactory fruitsFactory = new FruitFactory();
+    private EntityFactory obstaclesFactory = new ObstacleFactory();
+
+    // Game entities
+    private Player player;
+    private Obstacles obstacles;
+    private Fruits fruits;
+    private Ground ground;
+
 
     private boolean running = false;
     private boolean gameOver = false;
@@ -43,14 +50,21 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
-
     }
 
     public static synchronized GameScreen getInstance(){
         if (instance == null) {
             instance = new GameScreen();
+            instance.initializeEntities();
         }
         return instance;
+    }
+
+    private void initializeEntities() {
+        this.player = new Player.Builder(this, keyI).build();
+        this.obstacles = (Obstacles) obstaclesFactory.createEntity();
+        this.fruits = (Fruits) fruitsFactory.createEntity();
+        this.ground = new Ground(screenHeight);
     }
 
     @Override
@@ -124,7 +138,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         score = 0;
         count = 0;
         gameOver = false;
-        player = new Player(this, keyI);
+        //player = new Player(this, keyI);
         obstacles = new Obstacles((int)(screenWidth * 1.5));
 
         startGameThread();
@@ -134,7 +148,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count += 1;
         if(count % 50 == 0){
             score += 1;
-            speed += .15;
+            speed += .2;
         }
         player.update();
         obstacles.update(speed);
@@ -148,7 +162,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             gameOver = true;
         }
         if(fruits.hasCollidedFruit(player)){
-            score += 8;
+            score += 5;
             notifyObservers(EventType.Eat, "You ate a fruit! +8");
         }
     }
@@ -160,13 +174,26 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         graphics.drawString(Integer.toString(score),getWidth()/2-5,100);
         player.draw(graphics2);
         obstacles.create(graphics);
+
+
         for(Fruits.Fruit f : fruits.fruit_list) {
             if(!f.isHit) { // Only draw fruits that are not hit
                 graphics.drawImage(f.image, f.x, f.y, null);
             }
         }
         ground.create(graphics);
-        //graphics2.dispose();
+        drawDebugBounds(graphics2);
+    }
+    private void drawDebugBounds(Graphics2D g2d) {
+        // Draw player's collision boundary
+        g2d.setColor(Color.RED);
+        g2d.draw(player.getBounds());
+
+        // Draw each obstacle's collision boundary
+        g2d.setColor(Color.BLUE);
+        for (Obstacles.Obstacle o : obstacles.obstacle_list) {
+            g2d.draw(o.getObstacle());
+        }
     }
 
     public void paintObservation(String message){

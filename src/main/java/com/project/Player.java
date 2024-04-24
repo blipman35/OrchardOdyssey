@@ -5,35 +5,56 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Player extends Entity{
-
-    GameScreen gs;
-    KeyInput keyI;
-    private  boolean isAlive = true;
-    BufferedImage deadPlayer;
-
-    BufferedImage player_1, player_2, player_3, player_4, player_jump;
-    final int startingY = 300;
+public class Player extends Entity {
+    private int x, y, speed;
+    private BufferedImage player_1, player_2, player_3, player_4, player_jump;
+    private boolean isJumping = false, isCrouching = false, isAlive = true;
+    private int spriteCounter, spriteNum;
+    private final int startingY = 300;
     private int speedY = 0;
-    private boolean isJumping = false;
-    private boolean isCrouching = false;
+    private KeyInput keyI;
+    private GameScreen gs;
 
-    private int spriteCounter = 0;
-    private int spriteNum = 0;
-
-    public Player(GameScreen gs, KeyInput keyI){
-        this.gs = gs;
-        this.keyI = keyI;
+    // Private constructor to force use of the Builder
+    private Player(Builder builder) {
+        this.gs = builder.gs;
+        this.keyI = builder.keyI;
+        this.x = builder.x;
+        this.y = builder.y;
+        this.speed = builder.speed;
         getPlayerImages();
-        setDefaultValues();
+
     }
 
-    public void setDefaultValues() {
-        x = 100;
-        y =300;
-        speed = 4;
-    }
+    public static class Builder {
+        private int x=100, y=300, speed;
+        private KeyInput keyI;
+        private GameScreen gs;
 
+        public Builder(GameScreen gs, KeyInput keyI) {
+            this.gs = gs;
+            this.keyI = keyI;
+        }
+
+        public Builder setX(int x) {
+            this.x = x;
+            return this;
+        }
+
+        public Builder setY(int y) {
+            this.y = y;
+            return this;
+        }
+
+        public Builder setSpeed(int speed) {
+            this.speed = speed;
+            return this;
+        }
+
+        public Player build() {
+            return new Player(this);
+        }
+    }
     public void getPlayerImages() {
         try {
             player_1 = ImageIO.read(getClass().getResource("/player/player_1.png"));
@@ -121,7 +142,7 @@ public class Player extends Entity{
         if (isCrouching) {
             return new Rectangle(x, y + gs.scaledTile - gs.scaledTile / 2, player_1.getWidth(), player_1.getHeight()/2);
         }
-        return new Rectangle(x, y, player_1.getWidth(), player_1.getHeight());
+        return new Rectangle(x, y, player_1.getWidth(), player_1.getHeight()-50);
     }
 
 }

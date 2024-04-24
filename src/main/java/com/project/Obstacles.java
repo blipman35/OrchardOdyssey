@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class Obstacles extends Entity{
-    private class Obstacle {
+    class Obstacle {
         BufferedImage image;
         int x;
         int y;
@@ -30,7 +30,7 @@ public class Obstacles extends Entity{
     private int obstacleInterval;
 
     private ArrayList<BufferedImage> image_list;
-    private ArrayList<Obstacle> obstacle_list;
+    ArrayList<Obstacle> obstacle_list;
 
     private Obstacle blockedAt;
     public Obstacles(int initialPos){
@@ -55,12 +55,13 @@ public class Obstacles extends Entity{
         int x = initialx;
         for (BufferedImage bi : image_list){
             Obstacle o = new Obstacle();
-            if (bi.getType() == 13){
-                o.imageName = "Crow";
-            }
             o.image = bi;
             o.x = x;
-            o.y = y;
+            o.y =  o.image.getHeight()+105;
+            if (bi.getType() == 13){
+                o.imageName = "Crow";
+                o.y = o.image.getHeight()+250;
+            }
             obstacle_list.add(o);
             x+= obstacleInterval;
         }
@@ -120,4 +121,5 @@ public class Obstacles extends Entity{
             obstacle_list.add(o);
         }
     }
+
 }
