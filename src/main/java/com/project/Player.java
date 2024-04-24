@@ -127,7 +127,6 @@ public class Player extends Entity {
         }
         else if (isCrouching) {
             // still need a crouching player
-            System.out.println("is this working");
             graphics2.drawImage(image, x, y + (gs.scaledTile - gs.scaledTile / 2), gs.scaledTile, gs.scaledTile/2, null);
         }
         else {
