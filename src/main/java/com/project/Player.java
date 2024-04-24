@@ -145,4 +145,16 @@ public class Player extends Entity {
         return new Rectangle(x, y, player_1.getWidth(), player_1.getHeight()-50);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public double getSpeedY() {
+        return speedY;
+    }
+
 }

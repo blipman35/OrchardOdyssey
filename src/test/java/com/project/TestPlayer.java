@@ -13,7 +13,7 @@ public class TestPlayer {
     public void setUp() {
         GameScreen gs = GameScreen.getInstance();
         KeyInput ki = new KeyInput();
-        player = new Player(gs, ki);
+        player = new Player.Builder(gs, ki).setX(100).setY(300).setSpeed(5).build();
     }
 
     @Test
@@ -22,16 +22,27 @@ public class TestPlayer {
     }
 
     @Test
-    public void testSetDefaultValues() {
-        player.setDefaultValues();
+    public void testDefaultValues() {
+        assertEquals(100, player.getX());
+        assertEquals(300, player.getY());
     }
 
     @Test
-    public void testAccelerate() {
-        double acceleration = 1.0;
-        player.accelerate(acceleration);
-        //assertEquals(player.getSpeedY(), 1.0);
+    void testAccelerate() {
+        double initialSpeedY = player.getSpeedY();
+        double accelerationY = 10;
+        player.accelerate(accelerationY);
+        assertEquals(initialSpeedY + accelerationY, player.getSpeedY());
     }
+
+    @Test
+    void testMove() {
+        double initialY = player.getY();
+        double yDelta = 5;
+        player.move(yDelta);
+        assertEquals(initialY + yDelta, player.getY());
+    }
+
     @Test
     public void testUpdate() {
         player.update();
