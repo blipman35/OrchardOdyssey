@@ -68,9 +68,8 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     @Override
     public void notifyObservers(EventType eventType, String eventDescription) {
-        for (IObserver observer : observers) {
-            EventBus.getInstance().postMessage(eventType, eventDescription);
-        }
+        EventBus.getInstance().postMessage(eventType, eventDescription);
+        paintObservation(eventDescription);
     }
 
     public void startGameThread(){
@@ -150,6 +149,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         }
         if(fruits.hasCollidedFruit(player)){
             score += 8;
+            notifyObservers(EventType.Eat, "You ate a fruit! +8");
         }
     }
 
@@ -167,6 +167,13 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         }
         ground.create(graphics);
         //graphics2.dispose();
+    }
+
+    public void paintObservation(String message){
+        Graphics graphics = getGraphics();
+        graphics.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        int messageSize = graphics.getFontMetrics().stringWidth(message);
+        graphics.drawString(message, getWidth()/2 - messageSize / 2, 120);
     }
 
 }
