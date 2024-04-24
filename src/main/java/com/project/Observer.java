@@ -1,5 +1,6 @@
 package com.project;
 
+import java.awt.*;
 import java.util.*;
 
 public class Observer implements IObserver{
