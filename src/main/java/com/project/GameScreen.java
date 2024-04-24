@@ -167,8 +167,8 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count = 0;
         gameOver = false;
         //player = new Player(this, keyI);
-        obstacles = new Obstacles((int)(screenWidth * 1.5));
-
+        //obstacles = new Obstacles((int)(screenWidth * 1.5));
+        initializeEntities();
         startGame();
     }
 
