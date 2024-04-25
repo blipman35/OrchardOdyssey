@@ -29,6 +29,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private Thread gameThread;
     KeyInput keyI = new KeyInput();
+
     // Entity factories
     private EntityFactory fruitsFactory = new FruitFactory();
     private EntityFactory obstaclesFactory = new ObstacleFactory();
@@ -39,15 +40,16 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private Fruits fruits;
     private Ground ground;
 
-
     private boolean running = false;
     private boolean gameOver = false;
     int playerSpeed = 4;
 
     private JButton playButton;
     private JButton restartButton;
+    private JButton exitButton;
 
     private boolean isGameStarted = false;
+
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.cyan);
@@ -61,8 +63,12 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         restartButton = new JButton("Try again");
         restartButton.addActionListener(e -> restartGame());
         restartButton.setVisible(false);
+
+        exitButton = new JButton("Exit");
+        exitButton.addActionListener(e -> System.exit(0));
         this.add(playButton);
         this.add(restartButton);
+        this.add(exitButton);
     }
 
     private void startGame() { 
@@ -70,6 +76,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             isGameStarted = true;
             playButton.setVisible(false);
             restartButton.setVisible(false);
+            exitButton.setVisible(false);
             startGameThread();
         }
     }
@@ -149,6 +156,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
                     notifyObservers(EventType.GameOver, "Game Over! Score: " + score);
                     isGameStarted = false;
                     restartButton.setVisible(true);
+                    exitButton.setVisible(true);
                     break;
                 }
             }
@@ -165,8 +173,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         score = 0;
         count = 0;
         gameOver = false;
-        //player = new Player(this, keyI);
-        //obstacles = new Obstacles((int)(screenWidth * 1.5));
         initializeEntities();
         startGame();
     }
@@ -202,7 +208,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         player.draw(graphics2);
         obstacles.create(graphics);
 
-
         for(Fruits.Fruit f : fruits.fruit_list) {
             if(!f.isHit) { // Only draw fruits that are not hit
                 graphics.drawImage(f.image, f.x, f.y, null);
@@ -211,6 +216,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         ground.create(graphics);
         drawDebugBounds(graphics2);
     }
+
     private void drawDebugBounds(Graphics2D g2d) {
         // Draw player's collision boundary
         g2d.setColor(Color.RED);
