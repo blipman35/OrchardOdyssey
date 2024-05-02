@@ -9,8 +9,7 @@ import java.util.Random;
 public class Obstacles extends Entity {
     abstract class Obstacle {
         protected BufferedImage image;
-        protected int x;
-        protected int y;
+        protected int x, y;
 
         public Obstacle(BufferedImage image, int x, int y) {
             this.image = image;
@@ -59,45 +58,51 @@ public class Obstacles extends Entity {
     }
 
     private ArrayList<Obstacle> obstacles;
-    private int initialX;
-    private int obstacleInterval;
+    private Random random = new Random();
+    private int screenWidth;
+    private final Resource resource = new Resource();
 
-    public Obstacles(int initialPos) {
-        obstacles = new ArrayList<>();
-        Random random = new Random();
-        initialX = initialPos;
-        obstacleInterval = random.nextInt(2101) + 500;
+    public Obstacles(int screenWidth) {
+        this.screenWidth = screenWidth;
+        this.obstacles = new ArrayList<>();
+        addInitialObstacles();
+    }
 
-        // Load images
-        BufferedImage crowImage = new Resource().getResourceImage("/images/crow.png");
-        BufferedImage shortImage = new Resource().getResourceImage("/images/Haystack-short.png");
-        BufferedImage tallImage = new Resource().getResourceImage("/images/Haystack-tall.png");
+    private void addInitialObstacles() {
+        int x = 0;
+        while (x < screenWidth * 1.5) {  // Fill the initial screen and some extra
+            x += getRandomInterval();
+            addRandomObstacle(x);
+        }
+    }
 
+    private int getRandomInterval() {
+        return random.nextInt(1200) + 500;  // Variable intervals between 200 and 400 pixels
+    }
 
-        // Initialize obstacles
-        int x = initialX;
-        obstacles.add(new GroundObstacle(shortImage, x, Ground.GROUND_Y));
-        x += obstacleInterval;
-        obstacles.add(new GroundObstacle(tallImage, x, Ground.GROUND_Y));
-        x += obstacleInterval;
-        obstacles.add(new RaisedObstacle(crowImage, x, Ground.GROUND_Y, 45));
-
+    private void addRandomObstacle(int x) {
+        int type = random.nextInt(3);
+        switch (type) {
+            case 0:
+                obstacles.add(new GroundObstacle(resource.getResourceImage("/images/Haystack-short.png"), x, Ground.GROUND_Y));
+                break;
+            case 1:
+                obstacles.add(new GroundObstacle(resource.getResourceImage("/images/Haystack-tall.png"), x, Ground.GROUND_Y));
+                break;
+            case 2:
+                obstacles.add(new RaisedObstacle(resource.getResourceImage("/images/crow.png"), x, Ground.GROUND_Y, 45));
+                break;
+        }
     }
 
     public void update(int speed){
-        Iterator<Obstacle> obloop = obstacles.iterator();
-        Obstacle first_o = obloop.next();
-        first_o.x -= speed;
-
-        while(obloop .hasNext()){
-            Obstacle o = obloop.next();
-            o.x -= speed;
-        }
-
-        if(first_o.x < -first_o.image.getWidth()){
-            obstacles.remove(first_o);
-            first_o.x = obstacles.get(obstacles.size()-1).x + obstacleInterval;
-            obstacles.add(first_o);
+        // Move obstacles
+        obstacles.forEach(o -> o.x -= speed);
+        // Remove obstacles that have scrolled off the screen
+        obstacles.removeIf(o -> o.x + o.image.getWidth() < 0);
+        // Add new obstacles if needed
+        if (obstacles.isEmpty() || obstacles.get(obstacles.size() - 1).x < screenWidth - getRandomInterval()) {
+            addRandomObstacle(obstacles.get(obstacles.size() - 1).x + getRandomInterval());
         }
     }
 
@@ -115,7 +120,6 @@ public class Obstacles extends Entity {
         Rectangle playerBounds = player.getBounds();
         for (Obstacle o : obstacles) {
             if (playerBounds.intersects(o.getBounds())) {
-                System.out.println("Collision has occurred");
                 GameScreen.getInstance().notifyObservers(EventType.Collision, "Collision has occurred");
                 return true;
             }
