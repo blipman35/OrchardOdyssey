@@ -62,15 +62,17 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
-
-        playButton = new JButton("Play"); 
+        ImageIcon playIcon = new ImageIcon(new Resource().getResourceImage("/icons/play.png"));
+        ImageIcon exitIcon = new ImageIcon(new Resource().getResourceImage("/icons/exit.png"));
+        ImageIcon tryAgainIcon = new ImageIcon(new Resource().getResourceImage("/icons/tryAgain.png"));
+        playButton = new JButton(playIcon);
         playButton.addActionListener(e -> startGame());
 
-        restartButton = new JButton("Try again");
+        restartButton = new JButton(tryAgainIcon);
         restartButton.addActionListener(e -> restartGame());
         restartButton.setVisible(false);
 
-        exitButton = new JButton("Exit");
+        exitButton = new JButton(exitIcon);
         exitButton.addActionListener(e -> System.exit(0));
         this.add(playButton);
         this.add(restartButton);
@@ -195,12 +197,12 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count += 1;
         if(count % 50 == 0){
             score += 1;
-            speed += .3;
+            speed += .35;
         }
         player.update();
         obstacles.update(speed);
         fruits.update(speed);
-        background.update(speed/2);
+        background.update(speed/4);
         ground.update(speed);
 
         if(obstacles.hasCollidedObstacle(player)){
