@@ -2,15 +2,18 @@ package com.project;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 
-import static org.slf4j.LoggerFactoryFriend.reset;
 
 public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private static GameScreen instance = null;
+
+    private String currentMessage = "";
+    private long messageVisibleUntil = 0;
+    private static final long MESSAGE_DURATION_NS = 1_000_000_000; // 1 second in nanoseconds
+
 
     private List<IObserver> observers = new ArrayList<>();
 
@@ -121,6 +124,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         gameThread.start();
     }
 
+
     @Override
     public void run() {
         double drawInterval = 1000000000 / FPS;
@@ -128,7 +132,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        int drawCount = 0;
         running = true;
 
         while (running) {
@@ -144,16 +147,13 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
                     update();
                     repaint();
                     delta--;
-                    drawCount++;
                 }
 
                 if (timer >= 1000000000) {
-                    drawCount = 0;
                     timer = 0;
                 }
 
                 if (gameOver) {
-                    System.out.println("Game Over! Score: " + score);
                     notifyObservers(EventType.GameOver, "Game Over! Score: " + score);
                     isGameStarted = false;
                     restartButton.setVisible(true);
@@ -161,12 +161,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
                     break;
                 }
             }
-        }
-    }
-
-    public void keyPressed(KeyEvent e) {
-        if (gameOver && e.getKeyCode() == KeyEvent.VK_R) {
-            restartGame();
         }
     }
 
@@ -182,7 +176,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count += 1;
         if(count % 50 == 0){
             score += 1;
-            speed += .25;
+            speed += .3;
         }
         player.update();
         obstacles.update(speed);
@@ -197,7 +191,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         }
         if(fruits.hasCollidedFruit(player)){
             score += 5;
-            notifyObservers(EventType.Eat, "You ate a fruit! +8");
+            notifyObservers(EventType.Eat, "You ate a fruit! +5");
         }
     }
 
@@ -205,7 +199,15 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         super.paintComponent(graphics);
         Graphics2D graphics2 = (Graphics2D) graphics;
         graphics.setFont(new Font("Times New Roman", Font.BOLD,25));
-        graphics.drawString(Integer.toString(score),getWidth()/2-5,100);
+        if(!gameOver) {
+            graphics.drawString(Integer.toString(score), getWidth() / 2 - 5, 100);
+        }
+        long currentTime = System.nanoTime();
+        if (!currentMessage.isEmpty() && currentTime < messageVisibleUntil) {
+            graphics2.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            int messageSize = graphics2.getFontMetrics().stringWidth(currentMessage);
+            graphics2.drawString(currentMessage, getWidth() / 2 - messageSize / 2, 120);
+        }
         ground.create(graphics);
         player.draw(graphics2);
         obstacles.create(graphics);
@@ -218,10 +220,16 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     }
 
     public void paintObservation(String message){
+        currentMessage = message;
+        messageVisibleUntil = System.nanoTime() + MESSAGE_DURATION_NS;
+        repaint();
+        /*
+        System.out.println("This is being called.");
         Graphics graphics = getGraphics();
         graphics.setFont(new Font("Times New Roman", Font.BOLD, 20));
         int messageSize = graphics.getFontMetrics().stringWidth(message);
         graphics.drawString(message, getWidth()/2 - messageSize / 2, 120);
+         */
     }
 
 }
