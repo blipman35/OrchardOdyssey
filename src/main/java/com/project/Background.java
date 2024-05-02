@@ -5,64 +5,60 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Ground {
+public class Background {
 
-    private class GroundImage {
+    private class BackgroundImage {
         BufferedImage image;
         int x;
     }
 
-    public static int GROUND_Y;
-
     private BufferedImage image;
 
-    private ArrayList<GroundImage> groundImageSet;
+    private ArrayList<BackgroundImage> BackgroundImageSet;
 
     private int width;
-    public Ground(int panelHeight, int panelWidth) {
-
-        GROUND_Y = 336;
+    public Background(int panelHeight, int panelWidth) {
 
         try{
-            image = new Resource().getResourceImage("/images/Ground.png");
+            image = new Resource().getResourceImage("/images/Sky.png");
         } catch(Exception e) {e.printStackTrace();}
 
-        groundImageSet = new ArrayList<GroundImage>();
+        BackgroundImageSet = new ArrayList<BackgroundImage>();
 
         int numImages = (int) Math.ceil((double) panelWidth / image.getWidth()) + 1;
-        groundImageSet.clear();
+        BackgroundImageSet.clear();
         for (int i = 0; i < numImages; i++) {
-            GroundImage obj = new GroundImage();
+            BackgroundImage obj = new BackgroundImage();
             obj.image = image;
             obj.x = i * image.getWidth();
-            groundImageSet.add(obj);
+            BackgroundImageSet.add(obj);
         }
         this.width = panelWidth;
     }
 
     public void update(int speed) {
-        Iterator<GroundImage> looper = groundImageSet.iterator();
-        GroundImage first = looper.next();
+        Iterator<BackgroundImage> looper = BackgroundImageSet.iterator();
+        BackgroundImage first = looper.next();
 
         first.x -= speed;
 
         int previousX = first.x;
         while(looper.hasNext()) {
-            GroundImage next = looper.next();
+            BackgroundImage next = looper.next();
             next.x = previousX + image.getWidth();
             previousX = next.x;
         }
 
         if(first.x < -image.getWidth()) {
-            groundImageSet.remove(first);
+            BackgroundImageSet.remove(first);
             first.x = previousX + image.getWidth();
-            groundImageSet.add(first);
+            BackgroundImageSet.add(first);
         }
     }
 
     public void create(Graphics g) {
-        for(GroundImage img : groundImageSet) {
-            g.drawImage(img.image, img.x, GROUND_Y, null);
+        for(BackgroundImage img : BackgroundImageSet) {
+            g.drawImage(img.image, img.x, Ground.GROUND_Y - img.image.getHeight(), null);
         }
     }
 
