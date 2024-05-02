@@ -89,11 +89,11 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         return instance;
     }
 
-    private void initializeEntities() {
+    public void initializeEntities() {
+        this.ground = new Ground(screenHeight, screenWidth);
         this.player = new Player.Builder(this, keyI).build();
         this.obstacles = (Obstacles) obstaclesFactory.createEntity();
         this.fruits = (Fruits) fruitsFactory.createEntity();
-        this.ground = new Ground(screenHeight);
     }
 
     @Override
@@ -205,6 +205,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         Graphics2D graphics2 = (Graphics2D) graphics;
         graphics.setFont(new Font("Times New Roman", Font.BOLD,25));
         graphics.drawString(Integer.toString(score),getWidth()/2-5,100);
+        ground.create(graphics);
         player.draw(graphics2);
         obstacles.create(graphics);
 
@@ -213,7 +214,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
                 graphics.drawImage(f.image, f.x, f.y, null);
             }
         }
-        ground.create(graphics);
         drawDebugBounds(graphics2);
     }
 
@@ -221,11 +221,12 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         // Draw player's collision boundary
         g2d.setColor(Color.RED);
         g2d.draw(player.getBounds());
-
+        g2d.setColor(Color.GREEN);
+        g2d.draw(ground.getGroundBounds());
         // Draw each obstacle's collision boundary
         g2d.setColor(Color.BLUE);
-        for (Obstacles.Obstacle o : obstacles.obstacle_list) {
-            g2d.draw(o.getObstacle());
+        for (Obstacles.Obstacle o : obstacles.getObstacles()) {
+            g2d.draw(o.getBounds());
         }
     }
 

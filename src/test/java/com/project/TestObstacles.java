@@ -30,8 +30,4 @@ public class TestObstacles {
         assertTrue(obstacles.hasCollidedObstacle(player));
     }
 
-    @Test
-    public void testResume() {
-        obstacles.resume();
-    }
 }

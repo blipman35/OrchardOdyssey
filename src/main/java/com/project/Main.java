@@ -12,6 +12,7 @@ public class Main {
         window.setTitle("Orchard Odyssey");
 
         GameScreen gameScreen = GameScreen.getInstance();
+        //gameScreen.initializeEntities();
         window.add(gameScreen);
 
         window.pack();
