@@ -52,7 +52,8 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
-        this.setBackground(Color.cyan);
+        Color sky = new Color(135, 206, 235);
+        this.setBackground(sky);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
