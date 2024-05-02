@@ -183,7 +183,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         player.update();
         obstacles.update(speed);
         fruits.update(speed);
-        background.update(speed);
+        background.update(speed/2);
         ground.update(speed);
 
         if(obstacles.hasCollidedObstacle(player)){

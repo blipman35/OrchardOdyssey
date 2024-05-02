@@ -66,9 +66,4 @@ public class Ground {
         }
     }
 
-    public Rectangle getGroundBounds() {
-        // Assuming the ground covers the entire screen width and the height of the ground is the height of the image
-        return new Rectangle(0, GROUND_Y, width, image.getHeight());
-    }
-
 }
