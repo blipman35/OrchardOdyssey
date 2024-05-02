@@ -29,6 +29,6 @@ public class TestObservation {
     public void testNotify() {
         Observer observer = new Observer("All events");
         gamescreen.attach(observer, List.of(EventType.All));
-        gamescreen.notifyObservers(EventType.All, "Test",0);
+        gamescreen.notifyObservers(EventType.All, "Test");
     }
 }

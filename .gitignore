@@ -1015,5 +1015,8 @@ flycheck_*.el
 profile_default/
 ipython_config.py
 
+# High score file
+highscore.dat
+
 # Remove previous ipynb_checkpoints
 #   git rm -r .ipynb_checkpoints/

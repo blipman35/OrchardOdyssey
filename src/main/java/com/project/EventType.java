@@ -5,5 +5,6 @@ public enum EventType {
     GameOver,
     Collision,
     Eat,
+    HighScore,
     All
 }

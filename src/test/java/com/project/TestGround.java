@@ -10,7 +10,7 @@ public class TestGround {
 
     @BeforeEach
     public void setUp() {
-        ground = new Ground(4);
+        ground = new Ground(4, 4);
     }
 
     @Test
