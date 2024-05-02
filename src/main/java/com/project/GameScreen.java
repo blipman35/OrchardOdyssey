@@ -42,6 +42,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private Obstacles obstacles;
     private Fruits fruits;
     private Ground ground;
+    private Background background;
 
     private boolean running = false;
     private boolean gameOver = false;
@@ -95,6 +96,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     public void initializeEntities() {
         this.ground = new Ground(screenHeight, screenWidth);
+        this.background = new Background(screenHeight, screenWidth);
         this.player = new Player.Builder(this, keyI).build();
         this.obstacles = (Obstacles) obstaclesFactory.createEntity();
         this.fruits = (Fruits) fruitsFactory.createEntity();
@@ -181,6 +183,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         player.update();
         obstacles.update(speed);
         fruits.update(speed);
+        background.update(speed);
         ground.update(speed);
 
         if(obstacles.hasCollidedObstacle(player)){
@@ -209,6 +212,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             graphics2.drawString(currentMessage, getWidth() / 2 - messageSize / 2, 120);
         }
         ground.create(graphics);
+        background.create(graphics);
         player.draw(graphics2);
         obstacles.create(graphics);
 
