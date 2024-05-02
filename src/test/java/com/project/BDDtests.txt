@@ -1,0 +1,25 @@
+BDD Scenarios:
+
+Scenario: User understands and is able to start a game
+  Given the main function is run
+  When the window appears
+  Then the user should be able to click the start button
+  And the game should begin with the intuitive instructions of jumping the main character
+
+Scenario: User is able to collect fruit
+  Given the game is running and the user jumps in time to collide with a fruit object
+  When the user's player object collides with the fruit
+  Then the fruit should disappear
+  And the user's score should increase by 5
+
+Scenario: Game should move faster with higher score from distance
+  Given the game's score has been increased due to surviving
+  When the user continues to play
+  Then the game should increase in speed
+
+Scenario: User is able understand when game ends and restart
+  Given the game is running
+  When the user's player object collides with an obstacle
+  Then the game should end
+  And the user should be able to restart the game
+
