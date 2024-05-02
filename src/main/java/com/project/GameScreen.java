@@ -214,20 +214,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
                 graphics.drawImage(f.image, f.x, f.y, null);
             }
         }
-        drawDebugBounds(graphics2);
-    }
-
-    private void drawDebugBounds(Graphics2D g2d) {
-        // Draw player's collision boundary
-        g2d.setColor(Color.RED);
-        g2d.draw(player.getBounds());
-        g2d.setColor(Color.GREEN);
-        g2d.draw(ground.getGroundBounds());
-        // Draw each obstacle's collision boundary
-        g2d.setColor(Color.BLUE);
-        for (Obstacles.Obstacle o : obstacles.getObstacles()) {
-            g2d.draw(o.getBounds());
-        }
     }
 
     public void paintObservation(String message){
