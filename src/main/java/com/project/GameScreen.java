@@ -53,6 +53,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private JButton exitButton;
 
     private boolean isGameStarted = false;
+    private boolean highScoreAnnounced;
 
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -74,6 +75,9 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.add(playButton);
         this.add(restartButton);
         this.add(exitButton);
+
+        HighScoreManager highScoreManager = HighScoreManager.getInstance();
+        this.highScoreAnnounced = false;
     }
 
     private void startGame() { 
@@ -122,6 +126,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     }
 
     public void startGameThread(){
+        this.highScoreAnnounced = false;
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -166,6 +171,17 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         }
     }
 
+    private void checkHighScore() {
+        HighScoreManager highScoreManager = HighScoreManager.getInstance();
+        if (score > highScoreManager.getHighScore()) {
+            highScoreManager.setHighScore(score);
+            if(!highScoreAnnounced) {
+                notifyObservers(EventType.HighScore, "New High Score: " + score);
+                highScoreAnnounced = true;
+            }
+        }
+    }
+
     private void restartGame() {
         score = 0;
         count = 0;
@@ -175,6 +191,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     }
 
     public void update(){
+        checkHighScore();
         count += 1;
         if(count % 50 == 0){
             score += 1;
@@ -191,17 +208,29 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             repaint();
             running = false;
             gameOver = true;
+            checkHighScore();
         }
         if(fruits.hasCollidedFruit(player)){
             score += 5;
             notifyObservers(EventType.Eat, "You ate a fruit! +5");
+            checkHighScore();
         }
     }
 
     public void paintComponent(Graphics graphics){
+        HighScoreManager highScoreManager = HighScoreManager.getInstance();
         super.paintComponent(graphics);
         Graphics2D graphics2 = (Graphics2D) graphics;
-        graphics.setFont(new Font("Times New Roman", Font.BOLD,25));
+        ground.create(graphics);
+        background.create(graphics);
+        player.draw(graphics2);
+        obstacles.create(graphics);
+        for(Fruits.Fruit f : fruits.fruit_list) {
+            if(!f.isHit) { // Only draw fruits that are not hit
+                graphics.drawImage(f.image, f.x, f.y, null);
+            }
+        }
+        graphics.setFont(new Font("Times New Roman", Font.BOLD,20));
         if(!gameOver) {
             graphics.drawString(Integer.toString(score), getWidth() / 2 - 5, 100);
         }
@@ -211,29 +240,14 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             int messageSize = graphics2.getFontMetrics().stringWidth(currentMessage);
             graphics2.drawString(currentMessage, getWidth() / 2 - messageSize / 2, 120);
         }
-        ground.create(graphics);
-        background.create(graphics);
-        player.draw(graphics2);
-        obstacles.create(graphics);
+        graphics2.drawString("High Score: " + Integer.toString(highScoreManager.getHighScore()), 10, 570);
 
-        for(Fruits.Fruit f : fruits.fruit_list) {
-            if(!f.isHit) { // Only draw fruits that are not hit
-                graphics.drawImage(f.image, f.x, f.y, null);
-            }
-        }
     }
 
     public void paintObservation(String message){
         currentMessage = message;
         messageVisibleUntil = System.nanoTime() + MESSAGE_DURATION_NS;
         repaint();
-        /*
-        System.out.println("This is being called.");
-        Graphics graphics = getGraphics();
-        graphics.setFont(new Font("Times New Roman", Font.BOLD, 20));
-        int messageSize = graphics.getFontMetrics().stringWidth(message);
-        graphics.drawString(message, getWidth()/2 - messageSize / 2, 120);
-         */
     }
 
 }
