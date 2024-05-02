@@ -18,21 +18,26 @@ public class Ground {
 
     private ArrayList<GroundImage> groundImageSet;
 
-    public Ground(int panelHeight) {
-        GROUND_Y = (int)(panelHeight - 0.4 * panelHeight);
+    private int width;
+    public Ground(int panelHeight, int panelWidth) {
+
+        GROUND_Y = 336;
+
         try{
-            image = new Resource().getResourceImage("/images/Ground.png");
+            image = new Resource().getResourceImage("/images/test.png");
         } catch(Exception e) {e.printStackTrace();}
 
         groundImageSet = new ArrayList<GroundImage>();
 
-        //first ground image:
-        for(int i=0; i<3; i++) {
+        int numImages = (int) Math.ceil((double) panelWidth / image.getWidth()) + 1;
+        groundImageSet.clear();
+        for (int i = 0; i < numImages; i++) {
             GroundImage obj = new GroundImage();
             obj.image = image;
-            obj.x = 0;
+            obj.x = i * image.getWidth();
             groundImageSet.add(obj);
         }
+        this.width = panelWidth;
     }
 
     public void update(int speed) {
@@ -53,7 +58,6 @@ public class Ground {
             first.x = previousX + image.getWidth();
             groundImageSet.add(first);
         }
-
     }
 
     public void create(Graphics g) {
@@ -61,4 +65,10 @@ public class Ground {
             g.drawImage(img.image, img.x, GROUND_Y, null);
         }
     }
+
+    public Rectangle getGroundBounds() {
+        // Assuming the ground covers the entire screen width and the height of the ground is the height of the image
+        return new Rectangle(0, GROUND_Y, width, image.getHeight());
+    }
+
 }

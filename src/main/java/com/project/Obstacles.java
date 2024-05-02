@@ -6,69 +6,86 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-public class Obstacles extends Entity{
-    class Obstacle {
-        BufferedImage image;
-        int x;
-        int y;
-        String imageName = "Scarecrow";
+public class Obstacles extends Entity {
+    abstract class Obstacle {
+        protected BufferedImage image;
+        protected int x;
+        protected int y;
 
-        Rectangle getObstacle() {
-            Rectangle obstacle = new Rectangle();
-            obstacle.x = x;
-            if ("Crow".equals(imageName)) {
-                obstacle.y = y - 45;  // Since it is raised, decrease the y position
-            } else {
-                obstacle.y = y;
-            }
-            obstacle.width = image.getWidth();
-            obstacle.height = image.getHeight();
-            return obstacle;
+        public Obstacle(BufferedImage image, int x, int y) {
+            this.image = image;
+            this.x = x;
+            this.y = y - image.getHeight();
+        }
+
+        abstract Rectangle getBounds();
+        abstract void draw(Graphics g);
+    }
+
+    class GroundObstacle extends Obstacle {
+        public GroundObstacle(BufferedImage image, int x, int y) {
+            super(image, x, y);
+        }
+
+        @Override
+        Rectangle getBounds() {
+            return new Rectangle(x, y, image.getWidth(), image.getHeight());
+        }
+
+        @Override
+        void draw(Graphics g) {
+            g.drawImage(image, x, y, null);
         }
     }
-    private int initialx;
+
+    class RaisedObstacle extends Obstacle {
+        private int raiseHeight;
+
+        public RaisedObstacle(BufferedImage image, int x, int y, int raiseHeight) {
+            super(image, x, y);
+            this.raiseHeight = raiseHeight;
+            this.y -= raiseHeight;
+        }
+
+        @Override
+        Rectangle getBounds() {
+            return new Rectangle(x, y, image.getWidth(), image.getHeight());
+        }
+
+        @Override
+        void draw(Graphics g) {
+            g.drawImage(image, x, y, null);
+        }
+    }
+
+    private ArrayList<Obstacle> obstacles;
+    private int initialX;
     private int obstacleInterval;
 
-    private ArrayList<BufferedImage> image_list;
-    ArrayList<Obstacle> obstacle_list;
-
-    private Obstacle blockedAt;
-    public Obstacles(int initialPos){
-        obstacle_list = new ArrayList<Obstacle>();
-        image_list = new ArrayList<BufferedImage>();
-
+    public Obstacles(int initialPos) {
+        obstacles = new ArrayList<>();
         Random random = new Random();
-        int randomNumber = random.nextInt(2600 - 500 + 1) + 500;
-        initialx = initialPos;
-        obstacleInterval = randomNumber;
-        //speed = 10;
+        initialX = initialPos;
+        obstacleInterval = random.nextInt(2101) + 500;
 
-        image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
-        image_list.add(new Resource().getResourceImage("/images/scarecrow-1.jpg"));
-        image_list.add(new Resource().getResourceImage("/images/crow.png"));
+        // Load images
+        BufferedImage crowImage = new Resource().getResourceImage("/images/crow.png");
+        BufferedImage shortImage = new Resource().getResourceImage("/images/Haystack-short.png");
+        BufferedImage tallImage = new Resource().getResourceImage("/images/Haystack-tall.png");
 
-        /* input images
-        -----------------------
-        -----------------------
-         */
 
-        int x = initialx;
-        for (BufferedImage bi : image_list){
-            Obstacle o = new Obstacle();
-            o.image = bi;
-            o.x = x;
-            o.y =  o.image.getHeight()+105;
-            if (bi.getType() == 13){
-                o.imageName = "Crow";
-                o.y = o.image.getHeight()+250;
-            }
-            obstacle_list.add(o);
-            x+= obstacleInterval;
-        }
+        // Initialize obstacles
+        int x = initialX;
+        obstacles.add(new GroundObstacle(shortImage, x, Ground.GROUND_Y));
+        x += obstacleInterval;
+        obstacles.add(new GroundObstacle(tallImage, x, Ground.GROUND_Y));
+        x += obstacleInterval;
+        obstacles.add(new RaisedObstacle(crowImage, x, Ground.GROUND_Y, 45));
+
     }
 
     public void update(int speed){
-        Iterator<Obstacle> obloop = obstacle_list.iterator();
+        Iterator<Obstacle> obloop = obstacles.iterator();
         Obstacle first_o = obloop.next();
         first_o.x -= speed;
 
@@ -77,49 +94,32 @@ public class Obstacles extends Entity{
             o.x -= speed;
         }
 
-
         if(first_o.x < -first_o.image.getWidth()){
-            obstacle_list.remove(first_o);
-            first_o.x = obstacle_list.get(obstacle_list.size()-1).x + obstacleInterval;
-            obstacle_list.add(first_o);
+            obstacles.remove(first_o);
+            first_o.x = obstacles.get(obstacles.size()-1).x + obstacleInterval;
+            obstacles.add(first_o);
         }
     }
 
-    public void create(Graphics g){
-        for(Obstacle o: obstacle_list){
-            int obstacleBottom = Ground.GROUND_Y - o.image.getHeight()+5;
-            if (o.imageName.equals("Crow")) {
-                obstacleBottom -= 45; // Raise the image by 50 pixels
-            }
-            g.drawImage(o.image,o.x,obstacleBottom,null); //This is where we add observer!
+    public ArrayList<Obstacle> getObstacles() {
+        return obstacles;
+    }
+
+    public void create(Graphics g) {
+        for (Obstacle o : obstacles) {
+            o.draw(g);
         }
     }
 
-    public boolean hasCollidedObstacle(Player player){
+    public boolean hasCollidedObstacle(Player player) {
         Rectangle playerBounds = player.getBounds();
-        for(Obstacle o: obstacle_list){
-            if(playerBounds.intersects(o.getObstacle())){
+        for (Obstacle o : obstacles) {
+            if (playerBounds.intersects(o.getBounds())) {
                 System.out.println("Collision has occurred");
                 GameScreen.getInstance().notifyObservers(EventType.Collision, "Collision has occurred");
-                blockedAt = o;
                 return true;
             }
         }
         return false;
     }
-
-    public void resume(){
-        int x = initialx/2;
-        obstacle_list = new ArrayList<Obstacle>();
-
-        for(BufferedImage bi: image_list){
-            Obstacle o = new Obstacle();
-            o.image = bi;
-            o.x = x;
-            o.y = 150; //Change later
-            x+= obstacleInterval;
-            obstacle_list.add(o);
-        }
-    }
-
 }

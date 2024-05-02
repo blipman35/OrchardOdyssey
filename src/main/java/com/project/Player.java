@@ -10,7 +10,7 @@ public class Player extends Entity {
     private BufferedImage player_1, player_2, player_3, player_4, player_jump;
     private boolean isJumping = false, isCrouching = false, isAlive = true;
     private int spriteCounter, spriteNum;
-    private final int startingY = 300;
+    private final int startingY = 288;
     private int speedY = 0;
     private KeyInput keyI;
     private GameScreen gs;
@@ -20,14 +20,14 @@ public class Player extends Entity {
         this.gs = builder.gs;
         this.keyI = builder.keyI;
         this.x = builder.x;
-        this.y = builder.y;
+        this.y = startingY;
         this.speed = builder.speed;
         getPlayerImages();
 
     }
 
     public static class Builder {
-        private int x=100, y=300, speed;
+        private int x=100, y= build().startingY, speed;
         private KeyInput keyI;
         private GameScreen gs;
 
@@ -55,6 +55,7 @@ public class Player extends Entity {
             return new Player(this);
         }
     }
+
     public void getPlayerImages() {
         try {
             player_1 = ImageIO.read(getClass().getResource("/player/player_1.png"));
@@ -90,6 +91,7 @@ public class Player extends Entity {
         }
 
         if(keyI.upPressed && !isJumping){
+            if (isCrouching) { isCrouching = false; }
             isJumping = true;
             accelerate(-25);
         }
