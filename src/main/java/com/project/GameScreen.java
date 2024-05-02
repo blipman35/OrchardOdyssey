@@ -62,15 +62,16 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyI);
         this.setFocusable(true);
-
-        playButton = new JButton("Play"); 
+        ImageIcon playIcon = new ImageIcon(new Resource().getResourceImage("/icons/play.png"));
+        ImageIcon exitIcon = new ImageIcon(new Resource().getResourceImage("/icons/exit.png"));
+        playButton = new JButton(playIcon);
         playButton.addActionListener(e -> startGame());
 
         restartButton = new JButton("Try again");
         restartButton.addActionListener(e -> restartGame());
         restartButton.setVisible(false);
 
-        exitButton = new JButton("Exit");
+        exitButton = new JButton(exitIcon);
         exitButton.addActionListener(e -> System.exit(0));
         this.add(playButton);
         this.add(restartButton);
