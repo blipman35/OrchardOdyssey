@@ -24,7 +24,7 @@ public class Ground {
         GROUND_Y = 336;
 
         try{
-            image = new Resource().getResourceImage("/images/test.png");
+            image = new Resource().getResourceImage("/images/Ground.png");
         } catch(Exception e) {e.printStackTrace();}
 
         groundImageSet = new ArrayList<GroundImage>();
