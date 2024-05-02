@@ -93,7 +93,7 @@ public class Player extends Entity {
         if(keyI.upPressed && !isJumping){
             if (isCrouching) { isCrouching = false; }
             isJumping = true;
-            accelerate(-25);
+            accelerate(-22);
         }
         if (keyI.downPressed && !isJumping && !isCrouching) {
             isCrouching = true;

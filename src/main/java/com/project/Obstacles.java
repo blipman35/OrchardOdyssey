@@ -39,21 +39,27 @@ public class Obstacles extends Entity {
 
     class RaisedObstacle extends Obstacle {
         private int raiseHeight;
+        private int stackCount;  // Number of crows in the stack
 
-        public RaisedObstacle(BufferedImage image, int x, int y, int raiseHeight) {
+        public RaisedObstacle(BufferedImage image, int x, int y, int raiseHeight, int stackCount) {
             super(image, x, y);
             this.raiseHeight = raiseHeight;
-            this.y -= raiseHeight;
+            this.y -= raiseHeight * stackCount;  // Adjust starting y position based on the number of crows
+            this.stackCount = stackCount;
         }
 
         @Override
         Rectangle getBounds() {
-            return new Rectangle(x, y, image.getWidth(), image.getHeight());
+            return new Rectangle(x, y, image.getWidth(), image.getHeight() * stackCount);
         }
 
         @Override
         void draw(Graphics g) {
-            g.drawImage(image, x, y, null);
+            int drawY = y;
+            for (int i = 0; i < stackCount; i++) {
+                g.drawImage(image, x, drawY, null);
+                drawY += image.getHeight();  // Move draw position up for the next crow
+            }
         }
     }
 
@@ -81,7 +87,7 @@ public class Obstacles extends Entity {
     }
 
     private void addRandomObstacle(int x) {
-        int type = random.nextInt(3);
+        int type = random.nextInt(4);
         switch (type) {
             case 0:
                 obstacles.add(new GroundObstacle(resource.getResourceImage("/images/Haystack-short.png"), x, Ground.GROUND_Y));
@@ -90,8 +96,11 @@ public class Obstacles extends Entity {
                 obstacles.add(new GroundObstacle(resource.getResourceImage("/images/Haystack-tall.png"), x, Ground.GROUND_Y));
                 break;
             case 2:
-                obstacles.add(new RaisedObstacle(resource.getResourceImage("/images/crow.png"), x, Ground.GROUND_Y, 45));
+                obstacles.add(new RaisedObstacle(resource.getResourceImage("/images/crow.png"), x, Ground.GROUND_Y, 45,1));
                 break;
+            case 3:
+                obstacles.add(new RaisedObstacle(resource.getResourceImage("/images/crow.png"), x, Ground.GROUND_Y, 45, 5));
+
         }
     }
 
