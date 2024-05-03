@@ -54,7 +54,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private boolean isGameStarted = false;
     private boolean highScoreAnnounced;
-
+    private HighScoreManager highScoreManager;
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         Color sky = new Color(135, 206, 235);
@@ -78,7 +78,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.add(restartButton);
         this.add(exitButton);
 
-        HighScoreManager highScoreManager = HighScoreManager.getInstance();
+        this.highScoreManager = new HighScoreManager();
         this.highScoreAnnounced = false;
     }
 
@@ -174,7 +174,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     }
 
     private void checkHighScore() {
-        HighScoreManager highScoreManager = HighScoreManager.getInstance();
         if (score > highScoreManager.getHighScore()) {
             highScoreManager.setHighScore(score);
             if(!highScoreAnnounced) {
@@ -220,7 +219,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     }
 
     public void paintComponent(Graphics graphics){
-        HighScoreManager highScoreManager = HighScoreManager.getInstance();
         super.paintComponent(graphics);
         Graphics2D graphics2 = (Graphics2D) graphics;
         ground.create(graphics);

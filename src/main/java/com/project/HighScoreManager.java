@@ -3,19 +3,12 @@ package com.project;
 import java.io.*;
 
 public class HighScoreManager {
-    private static HighScoreManager instance;
+
     private static final String HIGH_SCORE_FILE = "highscore.dat";
     private int highScore;
 
-    private HighScoreManager() {
+    public HighScoreManager() {
         this.highScore = loadHighScore();
-    }
-
-    public static synchronized HighScoreManager getInstance() {
-        if (instance == null) {
-            instance = new HighScoreManager();
-        }
-        return instance;
     }
 
     public void saveHighScore() {
@@ -42,7 +35,7 @@ public class HighScoreManager {
     public void setHighScore(int highScore) {
         if (highScore > this.highScore) {
             this.highScore = highScore;
-            saveHighScore();  // Save new high score automatically
+            saveHighScore(); 
         }
     }
 }
