@@ -1,4 +1,5 @@
 # OrchardOdyssey
+By Benjamin Lipman, Will Dravenstott, and Jaden Snell
 <p align="center">
 <img src="https://github.com/blipman35/OrchardOdyssey/assets/21202410/dd98f54d-ae27-4459-a5b3-584dc68e7bd4" width="500" height="500">
 </p>
