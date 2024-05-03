@@ -13,7 +13,7 @@ public class TestObstacles {
     public void setUp() {
         GameScreen gs = GameScreen.getInstance();
         KeyInput ki = new KeyInput();
-        player = new Player.Builder(gs, ki).setX(100).setSpeed(5).build();
+        player = new Player.Builder(gs, ki).setX(100).build();
         obstacles = new Obstacles(100); }
 
     @Test
