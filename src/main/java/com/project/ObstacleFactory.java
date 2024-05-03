@@ -5,7 +5,7 @@ public class ObstacleFactory extends EntityFactory {
 
     @Override
     public Obstacles createEntity() {
-        return new Obstacles(GameScreen.getInstance().screenWidth);
+        return new Obstacles((int) (GameScreen.getInstance().screenWidth*1.5));
     }
 
     public Obstacles.Obstacle createObstacle(ObstacleType type, int x, int y) {
