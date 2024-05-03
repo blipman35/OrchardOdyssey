@@ -27,7 +27,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private int score;
     private int count;
 
-    private int speed = 10;
+    private int speed;
     int FPS = 60;
 
     private Thread gameThread;
@@ -46,7 +46,6 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
     private boolean running = false;
     private boolean gameOver = false;
-    int playerSpeed = 4;
 
     private JButton playButton;
     private JButton restartButton;
@@ -83,10 +82,11 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
 
         this.highScoreManager = new HighScoreManager();
         this.highScoreAnnounced = false;
+        this.speed = 10;
     }
 
     private void startGame() { 
-        if (!isGameStarted) { 
+        if (!isGameStarted) {
             isGameStarted = true;
             playButton.setVisible(false);
             restartButton.setVisible(false);
@@ -193,6 +193,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     }
 
     private void restartGame() {
+        speed = 10;
         score = 0;
         count = 0;
         gameOver = false;
@@ -205,7 +206,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         count += 1;
         if(count % 50 == 0){
             score += 1;
-            speed += .35;
+            speed += 0.35;
         }
         player.update();
         obstacles.update(speed);

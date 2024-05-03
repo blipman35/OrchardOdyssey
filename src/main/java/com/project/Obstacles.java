@@ -48,6 +48,7 @@ public class Obstacles extends Entity {
     }
 
     public static class RaisedObstacle extends Obstacle {
+
         private int raiseHeight;
         private int stackCount;
 
