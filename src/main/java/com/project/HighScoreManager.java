@@ -33,10 +33,9 @@ public class HighScoreManager {
     }
 
     public void setHighScore(int highScore) {
-        if (highScore > this.highScore) {
-            this.highScore = highScore;
-            saveHighScore(); 
-        }
+        this.highScore = highScore;
+        saveHighScore();
     }
+
 }
 

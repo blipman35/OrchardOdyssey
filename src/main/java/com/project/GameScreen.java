@@ -55,6 +55,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private boolean isGameStarted = false;
     private boolean highScoreAnnounced;
     private HighScoreManager highScoreManager;
+
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         Color sky = new Color(135, 206, 235);
