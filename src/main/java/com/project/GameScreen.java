@@ -24,7 +24,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     final int maxScreenRow = 12;
     final int screenWidth = scaledTile * maxScreenCol;
     final int screenHeight = scaledTile * maxScreenRow;
-    private int score;
+    int score;
     private int count;
 
     private int speed;
@@ -85,7 +85,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.speed = 10;
     }
 
-    private void startGame() { 
+    void startGame() {
         if (!isGameStarted) {
             isGameStarted = true;
             playButton.setVisible(false);
@@ -192,7 +192,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         }
     }
 
-    private void restartGame() {
+    void restartGame() {
         speed = 10;
         score = 0;
         count = 0;
