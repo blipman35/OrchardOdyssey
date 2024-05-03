@@ -14,7 +14,7 @@ public class TestFruits {
     public void setUp() {
         GameScreen gs = GameScreen.getInstance();
         KeyInput ki = new KeyInput();
-        player = new Player.Builder(gs, ki).setX(100).setY(300).setSpeed(5).build();
+        player = new Player.Builder(gs, ki).setX(100).setY(300).build();
         fruits = new Fruits(150);
     }
 
