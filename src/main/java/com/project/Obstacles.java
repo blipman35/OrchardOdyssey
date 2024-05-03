@@ -3,11 +3,21 @@ package com.project;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Obstacles extends Entity {
-    abstract class Obstacle {
+    private ArrayList<Obstacle> obstacles;
+    private Random random = new Random();
+    private int screenWidth;
+    private ObstacleFactory obstacleFactory = new ObstacleFactory();
+
+    public Obstacles(int screenWidth) {
+        this.screenWidth = screenWidth;
+        this.obstacles = new ArrayList<>();
+        addInitialObstacles();
+    }
+
+    public static abstract class Obstacle {
         protected BufferedImage image;
         protected int x, y;
 
@@ -21,7 +31,7 @@ public class Obstacles extends Entity {
         abstract void draw(Graphics g);
     }
 
-    class GroundObstacle extends Obstacle {
+    public static class GroundObstacle extends Obstacle {
         public GroundObstacle(BufferedImage image, int x, int y) {
             super(image, x, y);
         }
@@ -37,14 +47,14 @@ public class Obstacles extends Entity {
         }
     }
 
-    class RaisedObstacle extends Obstacle {
+    public static class RaisedObstacle extends Obstacle {
         private int raiseHeight;
-        private int stackCount;  // Number of crows in the stack
+        private int stackCount;
 
         public RaisedObstacle(BufferedImage image, int x, int y, int raiseHeight, int stackCount) {
             super(image, x, y);
             this.raiseHeight = raiseHeight;
-            this.y -= raiseHeight * stackCount;  // Adjust starting y position based on the number of crows
+            this.y -= raiseHeight * stackCount;
             this.stackCount = stackCount;
         }
 
@@ -58,61 +68,35 @@ public class Obstacles extends Entity {
             int drawY = y;
             for (int i = 0; i < stackCount; i++) {
                 g.drawImage(image, x, drawY, null);
-                drawY += image.getHeight();  // Move draw position up for the next crow
+                drawY += image.getHeight();
             }
         }
     }
 
-    private ArrayList<Obstacle> obstacles;
-    private Random random = new Random();
-    private int screenWidth;
-    private final Resource resource = new Resource();
-
-    public Obstacles(int screenWidth) {
-        this.screenWidth = screenWidth;
-        this.obstacles = new ArrayList<>();
-        addInitialObstacles();
-    }
-
     private void addInitialObstacles() {
         int x = 0;
-        while (x < screenWidth * 1.5) {  // Fill the initial screen and some extra
+        while (x < screenWidth * 1.5) {
             x += getRandomInterval();
             addRandomObstacle(x);
         }
     }
 
     private int getRandomInterval() {
-        return random.nextInt(1200) + 500;  // Variable intervals between 200 and 400 pixels
+        return random.nextInt(1200) + 500;
     }
 
     private void addRandomObstacle(int x) {
-        int type = random.nextInt(4);
-        switch (type) {
-            case 0:
-                obstacles.add(new GroundObstacle(resource.getResourceImage("/images/Haystack-short.png"), x, Ground.GROUND_Y));
-                break;
-            case 1:
-                obstacles.add(new GroundObstacle(resource.getResourceImage("/images/Haystack-tall.png"), x, Ground.GROUND_Y));
-                break;
-            case 2:
-                obstacles.add(new RaisedObstacle(resource.getResourceImage("/images/crow.png"), x, Ground.GROUND_Y, 45,1));
-                break;
-            case 3:
-                obstacles.add(new RaisedObstacle(resource.getResourceImage("/images/crow.png"), x, Ground.GROUND_Y, 45, 5));
-
-        }
+        ObstacleType type = ObstacleType.values()[random.nextInt(ObstacleType.values().length)];
+        obstacles.add(obstacleFactory.createObstacle(type, x, Ground.GROUND_Y));
     }
 
-    public void update(int speed){
-        // Move obstacles
+    public void update(int speed) {
         obstacles.forEach(o -> o.x -= speed);
-        // Remove obstacles that have scrolled off the screen
         obstacles.removeIf(o -> o.x + o.image.getWidth() < 0);
-        // Add new obstacles if needed
-        if (obstacles.isEmpty() || obstacles.get(obstacles.size() - 1).x < screenWidth - getRandomInterval()) {
+        if (!obstacles.isEmpty() && (obstacles.get(obstacles.size() - 1).x < screenWidth - getRandomInterval())) {
             addRandomObstacle(obstacles.get(obstacles.size() - 1).x + getRandomInterval());
         }
+
     }
 
     public ArrayList<Obstacle> getObstacles() {
