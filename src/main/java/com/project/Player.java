@@ -8,7 +8,9 @@ import java.io.IOException;
 public class Player extends Entity {
     private int x, y;
     private BufferedImage player_1, player_2, player_3, player_4, player_jump;
-    private boolean isJumping = false, isCrouching = false, isAlive = true;
+    boolean isJumping = false;
+    boolean isCrouching = false;
+    boolean isAlive = true;
     private int spriteCounter, spriteNum;
     private final int startingY = 288;
     private int speedY = 0;
