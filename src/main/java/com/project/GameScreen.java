@@ -56,6 +56,8 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
     private boolean highScoreAnnounced;
     private HighScoreManager highScoreManager;
 
+    // Private constructor to prevent multiple instantiation and control the object creation
+    // Instantiate all the visible game attributes
     private GameScreen(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         Color sky = new Color(135, 206, 235);
@@ -92,7 +94,9 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
             startGameThread();
         }
     }
-
+    // Class-based getInstance function to return the instance of the class
+    // If the instance is null, create a new instance and initialize the entities
+    // Synchronized to ensure that only one thread can be used for the instance creation - prevents multiple
     public static synchronized GameScreen getInstance(){
         if (instance == null) {
             instance = new GameScreen();
@@ -109,6 +113,7 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         this.fruits = (Fruits) fruitsFactory.createEntity();
     }
 
+    // Function to attach an observer to the object, with a list of interesting events that will be observed
     @Override
     public void attach(IObserver observer, List<EventType> interestingEvents) {
         observers.add(observer);
@@ -117,11 +122,14 @@ public class GameScreen extends JPanel implements Runnable, IObservable {
         }
     }
 
+    // Function to detach an observer from the object
     @Override
     public void detach(IObserver observer) {
         observers.remove(observer);
     }
 
+    // Function to notify all observers of an event
+    // Paint the observation to the screen - in the GameScreen function
     @Override
     public void notifyObservers(EventType eventType, String eventDescription) {
         EventBus.getInstance().postMessage(eventType, eventDescription);
