@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    private int x, y, speed;
+    private int x, y;
     private BufferedImage player_1, player_2, player_3, player_4, player_jump;
     private boolean isJumping = false, isCrouching = false, isAlive = true;
     private int spriteCounter, spriteNum;
@@ -25,7 +25,6 @@ public class Player extends Entity {
         this.keyI = builder.keyI;
         this.x = builder.x;
         this.y = startingY;
-        this.speed = builder.speed;
         getPlayerImages();
 
     }
@@ -47,11 +46,6 @@ public class Player extends Entity {
 
         public Builder setY(int y) {
             this.y = y;
-            return this;
-        }
-
-        public Builder setSpeed(int speed) {
-            this.speed = speed;
             return this;
         }
 
