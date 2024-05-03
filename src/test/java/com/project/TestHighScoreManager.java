@@ -7,19 +7,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestHighScoreManager {
 
     private HighScoreManager highScoreManager;
+
     @BeforeEach
-    public void setUp() { highScoreManager = HighScoreManager.getInstance(); }
+    public void setUp() { highScoreManager = new HighScoreManager(); }
 
     @Test
-    public void testSingleton() {
-        HighScoreManager instance2 = HighScoreManager.getInstance();
+    public void testHighScoreManager() {
         assertNotNull(highScoreManager);
-        assertSame(highScoreManager, instance2);
     }
 
     @Test
-    public void testGetHighScore() {
-        assertNotNull(highScoreManager.getHighScore());
+    public void testSaveHighScore() {
+        int score = highScoreManager.getHighScore();
+        highScoreManager.setHighScore(100);
+        assertEquals(highScoreManager.getHighScore(), 100);
+        highScoreManager.setHighScore(score); // set score back so it doesn't mess up the game
     }
 
 }
