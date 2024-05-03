@@ -15,7 +15,11 @@ public class Player extends Entity {
     private KeyInput keyI;
     private GameScreen gs;
 
-    // Private constructor to force use of the Builder
+    /* The Builder pattern creates an immutable player and encapsulates the
+    construction logic within the Builder class. This also allows for flexible
+    player creation as the parameters are built out step-by-step
+     */
+
     private Player(Builder builder) {
         this.gs = builder.gs;
         this.keyI = builder.keyI;
